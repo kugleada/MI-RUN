@@ -10,6 +10,12 @@ public class SchemeSymbol extends Node {
 
     @Override
     public Object eval(Environment env) {
-        return env.getValue(this.name);
+        return this.name;
+        //return env.getValue(this.name);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

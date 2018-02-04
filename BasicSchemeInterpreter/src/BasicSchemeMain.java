@@ -1,11 +1,9 @@
 import datatypes.Node;
+import datatypes.SchemeList;
 import reader.Reader;
 import scheme_env.Environment;
 
-import java.io.ByteArrayInputStream;
-import java.io.Console;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class BasicSchemeMain {
         public static void main(String[] args) throws IOException {
@@ -20,25 +18,28 @@ public class BasicSchemeMain {
         private static void startREPL() throws IOException {
             Environment topEnv = Environment.getBaseEnvironment();
 
-            Console console = System.console();
+            //Console console = System.console();
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             while (true) {
                 // READ
-                String data = console.readLine("~> ");
+                //String data = console.readLine("~> ");
+                System.out.print("~> ");
+                String data = br.readLine();
                 if (data == null) {
                     // EOF sent
                     break;
                 }
-                MumblerListNode<Node> nodes = Reader.read(
+                SchemeList nodes = Reader.read(
                         new ByteArrayInputStream(data.getBytes()));
 
                 // EVAL
-                Object result = ListNode.EMPTY;
+                Object result = SchemeList.EMPTY;
                 for (Node node : nodes) {
                     result = node.eval(topEnv);
                 }
 
                 // PRINT
-                if (result != MumblerListNode.EMPTY) {
+                if (result != SchemeList.EMPTY) {
                     System.out.println(result);
                 }
             }
@@ -47,7 +48,7 @@ public class BasicSchemeMain {
         private static void runScheme(String filename) throws IOException {
             Environment topEnv = Environment.getBaseEnvironment();
 
-            MumblerListNode<Node> nodes = Reader.read(new FileInputStream(filename));
+            SchemeList nodes = Reader.read(new FileInputStream(filename));
             for (Node node : nodes) {
                 node.eval(topEnv);
             }

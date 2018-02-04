@@ -15,4 +15,8 @@ public class SchemeNumber extends Node {
         return this.num;
     }
 
+    @Override
+    public String toString() {
+        return num.toString();
+    }
 }

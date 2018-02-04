@@ -1,25 +1,21 @@
 package reader;
 
-import datatypes.SchemeBoolean;
-import datatypes.Node;
-import datatypes.SchemeNumber;
-import datatypes.SchemeSymbol;
+import datatypes.*;
+import lang.SpecialForm;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PushbackReader;
+import java.io.*;
 import java.math.BigInteger;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Reader {
-    public static MumblerListNode read(InputStream istream) throws IOException {
+    public static SchemeList read(InputStream istream) throws IOException {
         return read(new PushbackReader(new InputStreamReader(istream)));
     }
 
-    private static MumblerListNode read(PushbackReader pstream)
+    private static SchemeList read(PushbackReader pstream)
             throws IOException {
-        List<Node> nodes = new ArrayList<Node>();
+        List<Node> nodes = new LinkedList<>();
 
         readWhitespace(pstream);
         char c = (char) pstream.read();
@@ -30,7 +26,7 @@ public class Reader {
             c = (char) pstream.read();
         }
 
-        return MumblerListNode.list(nodes);
+        return SchemeList.list(nodes);
     }
 
     private static void readWhitespace(PushbackReader pstream) throws IOException {
@@ -59,11 +55,11 @@ public class Reader {
 
     private static Node readNumber(PushbackReader pstream) throws IOException {
         StringBuffer stringNum = new StringBuffer();
-        char digit;
-        do {
-             digit = (char) pstream.read();
-             stringNum.append(digit);
-        } while (Character.isDigit(digit));
+        char digit = (char) pstream.read();
+        while (Character.isDigit(digit)) {
+            stringNum.append(digit);
+            digit = (char) pstream.read();
+        }
         //assert (digit == ' ' || digit == '\t' || digit == '\n') : "Reading a list must start with '('";
         pstream.unread(digit);
         return new SchemeNumber(new BigInteger(stringNum.toString()));
@@ -71,9 +67,9 @@ public class Reader {
 
     private static Node readBoolean(PushbackReader pstream) throws IOException {
         char bool = (char) pstream.read();
-        assert bool == '#' : "Reading a boolean must start with '#'";
+        //if (bool == '#') throw new IllegalArgumentException("Reading a boolean must start with '#'");
         bool = (char) pstream.read();
-        assert (bool == 't' || bool == 'f') : "After # there must be 't' or 'f'";
+        if (bool != 't' && bool != 'f') throw new IllegalArgumentException("After # there must be 't' or 'f'");
         if (bool == 'f') {
             return new SchemeBoolean(false);
         }
@@ -82,22 +78,20 @@ public class Reader {
 
     private static Node readSymbol(PushbackReader pstream) throws IOException {
         StringBuffer symbol = new StringBuffer();
-        char c;
-        do {
-            c = (char) pstream.read();
+        char c = (char) pstream.read();
+        while (!Character.isWhitespace(c) && c != -1 && c != ')' && c != '\uFFFF') { //\uFFFF occured at the end of line while reading in IDE
             symbol.append(c);
-        } while (c != -1 && c != ')' && !Character.isWhitespace(c));
+            c = (char) pstream.read();
+        }
         //assert (digit == ' ' || digit == '\t' || digit == '\n') : "Reading a list must start with '('";
         pstream.unread(c);
         return new SchemeSymbol(symbol.toString());
     }
 
     private static Node readList(PushbackReader pstream) throws IOException {
-        return null;
-        /*
         char paren = (char) pstream.read();
-        assert paren == '(' : "Reading a list must start with '('";
-        List<Node> list = new ArrayList<Node>();
+        //assert paren == '(' : "Reading a list must start with '('";
+        List<Node> list = new LinkedList<>();
         do {
             readWhitespace(pstream);
             char c = (char) pstream.read();
@@ -112,7 +106,6 @@ public class Reader {
                 list.add(readNode(pstream));
             }
         } while (true);
-        return SpecialForm.check(MumblerListNode.list(list));
-        */
+        return SpecialForm.check(SchemeList.list(list));
     }
 }
