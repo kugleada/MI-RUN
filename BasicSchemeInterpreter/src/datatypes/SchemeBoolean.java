@@ -2,7 +2,7 @@ package datatypes;
 
 import scheme_env.Environment;
 
-public class SchemeBoolean extends Node {
+public class SchemeBoolean extends SchemeNode {
     public static final SchemeBoolean TRUE = new SchemeBoolean(Boolean.TRUE);
     public static final SchemeBoolean FALSE = new SchemeBoolean(Boolean.FALSE);
 

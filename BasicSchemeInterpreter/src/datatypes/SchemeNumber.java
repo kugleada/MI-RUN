@@ -4,7 +4,7 @@ import scheme_env.Environment;
 
 import java.math.BigInteger;
 
-public class SchemeNumber extends Node {
+public class SchemeNumber extends SchemeNode {
     private final BigInteger num;
     public SchemeNumber(BigInteger num) {
         this.num = num;

@@ -4,7 +4,7 @@ import scheme_env.Environment;
 
 import java.util.Objects;
 
-public class SchemeSymbol extends Node {
+public class SchemeSymbol extends SchemeNode {
     private String name;
     public SchemeSymbol(String name) {
         this.name = name;

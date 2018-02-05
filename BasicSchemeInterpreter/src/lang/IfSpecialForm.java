@@ -1,6 +1,6 @@
 package lang;
 
-import datatypes.Node;
+import datatypes.SchemeNode;
 import datatypes.SchemeList;
 import scheme_env.Environment;
 
@@ -11,9 +11,9 @@ public class IfSpecialForm extends SpecialForm {
 
     @Override
     public Object eval(Environment env) {
-        Node testNode = this.listNode.cdr().car();
-        Node thenNode = this.listNode.cdr().cdr().car();
-        Node elseNode = this.listNode.cdr().cdr().cdr().car();
+        SchemeNode testNode = this.listNode.cdr().car();
+        SchemeNode thenNode = this.listNode.cdr().cdr().car();
+        SchemeNode elseNode = this.listNode.cdr().cdr().cdr().car();
 
         Object result = testNode.eval(env);
         if (result == SchemeList.EMPTY || Boolean.FALSE == result) {

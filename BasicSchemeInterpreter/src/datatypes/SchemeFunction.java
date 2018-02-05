@@ -2,7 +2,7 @@ package datatypes;
 
 import scheme_env.Environment;
 
-public abstract class SchemeFunction extends Node {
+public abstract class SchemeFunction extends SchemeNode {
     // other code...
 
     @Override

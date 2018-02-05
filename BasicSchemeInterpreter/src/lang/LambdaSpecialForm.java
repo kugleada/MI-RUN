@@ -1,6 +1,6 @@
 package lang;
 
-import datatypes.Node;
+import datatypes.SchemeNode;
 import datatypes.SchemeFunction;
 import datatypes.SchemeList;
 import datatypes.SchemeSymbol;
@@ -28,7 +28,7 @@ public class LambdaSpecialForm extends SpecialForm {
 
                 // Map parameter values to formal parameter names
                 int i = 0;
-                for (Node param : formalParams) {
+                for (SchemeNode param : formalParams) {
                     SchemeSymbol paramSymbol = (SchemeSymbol) param;
                     lambdaEnv.putValue(paramSymbol.getName(), args[i]);
                     i++;
@@ -36,7 +36,7 @@ public class LambdaSpecialForm extends SpecialForm {
 
                 // Evaluate body
                 Object output = null;
-                for (Node node : body) {
+                for (SchemeNode node : body) {
                     output = node.eval(lambdaEnv);
                 }
 

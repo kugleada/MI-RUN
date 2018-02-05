@@ -7,12 +7,11 @@ import static java.util.Arrays.asList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 
-public class SchemeList extends Node implements Iterable<Node> {
+public class SchemeList extends SchemeNode implements Iterable<SchemeNode> {
         public static final SchemeList EMPTY = new SchemeList();
 
-        private final Node car;
+        private final SchemeNode car;
         private final SchemeList cdr;
         private final int length;
 
@@ -22,19 +21,19 @@ public class SchemeList extends Node implements Iterable<Node> {
             this.length = 0;
         }
 
-        private SchemeList(Node car, SchemeList cdr) {
+        private SchemeList(SchemeNode car, SchemeList cdr) {
             this.car = car;
             this.cdr = cdr;
             this.length = cdr.length + 1;
         }
 
         //@SafeVarargs
-        public static SchemeList list(Node... objs) {
+        public static SchemeList list(SchemeNode... objs) {
             return list(asList(objs));
         }
 
 
-        public static  SchemeList list(List<Node> objs) {
+        public static  SchemeList list(List<SchemeNode> objs) {
             SchemeList l = EMPTY;
             for (int i=objs.size()-1; i>=0; i--) {
                 l = l.cons(objs.get(i));
@@ -43,11 +42,11 @@ public class SchemeList extends Node implements Iterable<Node> {
         }
 
 
-        public SchemeList cons(Node node) {
+        public SchemeList cons(SchemeNode node) {
             return new SchemeList(node, this);
         }
 
-        public Node car() {
+        public SchemeNode car() {
             if (this != EMPTY) {
                 return this.car;
             }
@@ -68,7 +67,7 @@ public class SchemeList extends Node implements Iterable<Node> {
         }
 
         @Override
-        public Iterator<Node> iterator() {
+        public Iterator<SchemeNode> iterator() {
             return new Iterator<>() {
                 private SchemeList l = SchemeList.this;
 
@@ -78,12 +77,12 @@ public class SchemeList extends Node implements Iterable<Node> {
                 }
 
                 @Override
-                public Node next() {
+                public SchemeNode next() {
                     if (this.l == EMPTY) {
                         //throw new SchemeException("At end of list");
                         return null;
                     }
-                    Node car = this.l.car;
+                    SchemeNode car = this.l.car;
                     this.l = this.l.cdr;
                     return car;
                 }
@@ -139,7 +138,7 @@ public class SchemeList extends Node implements Iterable<Node> {
         SchemeFunction function = (SchemeFunction) this.car.eval(env);
 
         List<Object> args = new LinkedList<>();
-        for (Node node : this.cdr) {
+        for (SchemeNode node : this.cdr) {
             args.add(node.eval(env));
         }
         return function.apply(args.toArray());

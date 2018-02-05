@@ -1,4 +1,4 @@
-import datatypes.Node;
+import datatypes.SchemeNode;
 import datatypes.SchemeList;
 import reader.Reader;
 import scheme_env.Environment;
@@ -34,7 +34,7 @@ public class BasicSchemeMain {
 
                 // EVAL
                 Object result = SchemeList.EMPTY;
-                for (Node node : nodes) {
+                for (SchemeNode node : nodes) {
                     result = node.eval(topEnv);
                 }
 
@@ -49,7 +49,7 @@ public class BasicSchemeMain {
             Environment topEnv = Environment.getBaseEnvironment();
 
             SchemeList nodes = Reader.read(new FileInputStream(filename));
-            for (Node node : nodes) {
+            for (SchemeNode node : nodes) {
                 node.eval(topEnv);
             }
         }

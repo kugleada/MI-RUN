@@ -15,7 +15,7 @@ public class Reader {
 
     private static SchemeList read(PushbackReader pstream)
             throws IOException {
-        List<Node> nodes = new LinkedList<>();
+        List<SchemeNode> nodes = new LinkedList<>();
 
         readWhitespace(pstream);
         char c = (char) pstream.read();
@@ -37,7 +37,7 @@ public class Reader {
         pstream.unread(c);
     }
 
-    public static Node readNode(PushbackReader pstream) throws IOException {
+    public static SchemeNode readNode(PushbackReader pstream) throws IOException {
         char c = (char) pstream.read();
         pstream.unread(c);
         if (c == '(') {
@@ -53,7 +53,7 @@ public class Reader {
         }
     }
 
-    private static Node readNumber(PushbackReader pstream) throws IOException {
+    private static SchemeNode readNumber(PushbackReader pstream) throws IOException {
         StringBuffer stringNum = new StringBuffer();
         char digit = (char) pstream.read();
         while (Character.isDigit(digit)) {
@@ -65,7 +65,7 @@ public class Reader {
         return new SchemeNumber(new BigInteger(stringNum.toString()));
     }
 
-    private static Node readBoolean(PushbackReader pstream) throws IOException {
+    private static SchemeNode readBoolean(PushbackReader pstream) throws IOException {
         char bool = (char) pstream.read();
         //if (bool == '#') throw new IllegalArgumentException("Reading a boolean must start with '#'");
         bool = (char) pstream.read();
@@ -76,7 +76,7 @@ public class Reader {
         return new SchemeBoolean(true);
     }
 
-    private static Node readSymbol(PushbackReader pstream) throws IOException {
+    private static SchemeNode readSymbol(PushbackReader pstream) throws IOException {
         StringBuffer symbol = new StringBuffer();
         char c = (char) pstream.read();
         while (!Character.isWhitespace(c) && c != -1 && c != ')' && c != '\uFFFF') { //\uFFFF occured at the end of line while reading in IDE
@@ -88,10 +88,10 @@ public class Reader {
         return new SchemeSymbol(symbol.toString());
     }
 
-    private static Node readList(PushbackReader pstream) throws IOException {
+    private static SchemeNode readList(PushbackReader pstream) throws IOException {
         char paren = (char) pstream.read();
         //assert paren == '(' : "Reading a list must start with '('";
-        List<Node> list = new LinkedList<>();
+        List<SchemeNode> list = new LinkedList<>();
         do {
             readWhitespace(pstream);
             char c = (char) pstream.read();

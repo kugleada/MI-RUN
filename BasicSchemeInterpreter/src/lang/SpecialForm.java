@@ -1,10 +1,10 @@
 package lang;
 
-import datatypes.Node;
+import datatypes.SchemeNode;
 import datatypes.SchemeList;
 import datatypes.SchemeSymbol;
 
-public abstract class SpecialForm extends Node {
+public abstract class SpecialForm extends SchemeNode {
     private static final SchemeSymbol DEFINE = new SchemeSymbol("define");
     private static final SchemeSymbol LAMBDA = new SchemeSymbol("lambda");
     private static final SchemeSymbol IF = new SchemeSymbol("if");
@@ -16,7 +16,7 @@ public abstract class SpecialForm extends Node {
         this.listNode = listNode;
     }
 
-    public static Node check(SchemeList l) {
+    public static SchemeNode check(SchemeList l) {
 
         if (l == SchemeList.EMPTY) {
             return l;
