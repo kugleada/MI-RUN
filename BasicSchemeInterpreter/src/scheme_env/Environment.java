@@ -30,6 +30,18 @@ public class Environment {
     }
 
     public static Environment getBaseEnvironment() {
-        return new Environment();
+        Environment env = new Environment();
+        env.putValue("+", BuiltInFunction.PLUS);
+        env.putValue("-", BuiltInFunction.MINUS);
+        env.putValue("*", BuiltInFunction.MULT);
+        env.putValue("/", BuiltInFunction.DIV);
+        env.putValue("=", BuiltInFunction.EQUALS);
+        env.putValue("<", BuiltInFunction.LESS_THAN);
+        env.putValue(">", BuiltInFunction.GREATER_THAN);
+        //env.putValue("list", BuiltInFunction.LIST);
+        env.putValue("car", BuiltInFunction.CAR);
+        env.putValue("cdr", BuiltInFunction.CDR);
+        env.putValue("println", BuiltInFunction.PRINTLN);
+        return env;
     }
 }

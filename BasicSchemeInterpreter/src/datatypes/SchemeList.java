@@ -5,7 +5,9 @@ import scheme_env.Environment;
 import static java.util.Arrays.asList;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 public class SchemeList extends Node implements Iterable<Node> {
         public static final SchemeList EMPTY = new SchemeList();
@@ -25,13 +27,13 @@ public class SchemeList extends Node implements Iterable<Node> {
             this.cdr = cdr;
             this.length = cdr.length + 1;
         }
-        /*
-        @SafeVarargs
-        public static <T> SchemeList<T> list(T... objs) {
+
+        //@SafeVarargs
+        public static SchemeList list(Node... objs) {
             return list(asList(objs));
         }
 
-        */
+
         public static  SchemeList list(List<Node> objs) {
             SchemeList l = EMPTY;
             for (int i=objs.size()-1; i>=0; i--) {
@@ -126,17 +128,20 @@ public class SchemeList extends Node implements Iterable<Node> {
             return b.toString();
         }
 
+    public int getLength() {
+        return length;
+    }
+
     @Override
     public Object eval(Environment env) {
-        return this.toString();
-        /*
-        Function function = (Function) this.car.eval(env);
+        //return this.toString();
 
-        List<Object> args = new ArrayList<Object>();
+        SchemeFunction function = (SchemeFunction) this.car.eval(env);
+
+        List<Object> args = new LinkedList<>();
         for (Node node : this.cdr) {
             args.add(node.eval(env));
         }
         return function.apply(args.toArray());
-        */
     }
 }
