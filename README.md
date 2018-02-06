@@ -7,13 +7,13 @@
 3. Unzip the GraalVM to ./graalvm
 4. Point JAVA_HOME to ./graalvm
 
-##Build program:
+## Build program:
 
 ```
 $ mvn package (or clean install: mvn clean install)
 ```
 
-##Run program:
+## Run program:
 1. Go to root folder of the project (./MI-RUN should be working directory)
 2. Run script ./schemein.
 
