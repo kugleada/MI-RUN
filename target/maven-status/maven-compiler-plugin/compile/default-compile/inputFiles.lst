@@ -1,0 +1,16 @@
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/scheme_env/Environment.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/datatypes/SchemeList.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/datatypes/SchemeNumber.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/BasicSchemeMain.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/datatypes/SchemeSymbol.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/datatypes/SchemeNode.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/scheme_env/SchemeException.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/lang/IfSpecialForm.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/lang/QuoteSpecialForm.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/reader/Reader.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/scheme_env/BuiltInFunction.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/datatypes/SchemeFunction.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/lang/LambdaSpecialForm.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/lang/DefineSpecialForm.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/lang/SpecialForm.java
+/home/jn/run/gitk/MI-RUN/src/main/java/cz/schemeinterpreter/datatypes/SchemeBoolean.java
