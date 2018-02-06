@@ -4,8 +4,8 @@
 
 1. Download repository
 2. Download GraalVM from http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html (i.e. GraalVM based on JDK for Linux)
-3. Unzip the GraalVM to ./graalvm
-4. Point JAVA_HOME to ./graalvm
+3. Unzip the GraalVM to ./graalvm (./graalvm should contain folders like bin, jre, lib, ...)
+4. Set JAVA_HOME to <absolute path to MI-RUN>/MI-RUN/graalvm (i.e. export JAVA_HOME=/home/jn/run/gitk/MI-RUN/graalvm) - this points to special JDK, maven will call it during build
 
 ## Build program:
 
@@ -15,7 +15,7 @@ $ mvn package (or clean install: mvn clean install)
 
 ## Run program:
 1. Go to root folder of the project (./MI-RUN should be working directory)
-2. Run script ./schemein.
+2. Run script ./schemein
 
 
 # Requirements for development, installation on Linux
