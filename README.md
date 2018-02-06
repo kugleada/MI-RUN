@@ -31,7 +31,7 @@ If JDK9 needed (it is NOT supported by GraalVM yet!):
 Maven:
 
 *  sudo apt-get install maven3
-* 1760  sudo apt-get install maven
+* sudo apt-get install maven
 
 If not working, then this:
 
@@ -44,3 +44,6 @@ For IntelliJ IDE, follow instructions here: https://www.jetbrains.com/help/idea/
 Download: https://www.jetbrains.com/idea/download/#section=linux
 
 (Choose Linux, download tar.gz, unpack to dir, run script)
+
+In IntelliJ, simply import project. It should detect pom.xml, project structure etc. Do not let IDE change the general structure! Do not build the program using IDE!
+Build it using mvn package and run it using ./schemein, as written above.
