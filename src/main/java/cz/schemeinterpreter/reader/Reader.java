@@ -1,7 +1,8 @@
 package cz.schemeinterpreter.reader;
-
+/*
 import cz.schemeinterpreter.datatypes.*;
 import cz.schemeinterpreter.lang.SpecialForm;
+import cz.schemeinterpreter.nodes.SchemeNode;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -109,3 +110,4 @@ public class Reader {
         return SpecialForm.check(SchemeList.list(list));
     }
 }
+*/
