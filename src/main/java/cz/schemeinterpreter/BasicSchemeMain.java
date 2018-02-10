@@ -75,7 +75,8 @@ public class BasicSchemeMain {
         private static void runTestScheme() throws IOException {
             VirtualFrame topFrame = createTopFrame(TruffleReader.frameDescriptors.peek());
             //String source = "(define add (lambda (x y) (+ x y)))"; // (add 4 5)
-            String source = "(+ (+ 1 2) (+ 3 4))";
+            //String source = "(define echo (lambda () 5)) (echo)";
+            String source = "((lambda (x) (+ x x)) 4)";
             InputStream streamIn = new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
             SchemeList<SchemeNode> nodes = TruffleReader.read(streamIn);
             System.out.println(execute(nodes, topFrame).toString());
