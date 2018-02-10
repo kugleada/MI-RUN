@@ -11,6 +11,7 @@ public class ReadArgumentNode extends SchemeNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
+        System.out.println("executing ReadArgumentNode" + argumentIndex);
         if (!this.isArgumentIndexInRange(virtualFrame)) {
             throw new IllegalArgumentException("Not enough arguments passed");
         }
@@ -22,6 +23,7 @@ public class ReadArgumentNode extends SchemeNode {
     }
 
     protected Object getArgument(VirtualFrame virtualFrame) {
+        System.out.println("returned arg: " + virtualFrame.getArguments()[argumentIndex + 1]);
         return virtualFrame.getArguments()[argumentIndex + 1];
     }
 }

@@ -4,7 +4,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import cz.schemeinterpreter.nodes.SchemeNode;
 
 public class BooleanNode extends SchemeNode {
-    public final boolean value;
+    private final boolean value;
 
     public BooleanNode(boolean bool) {
         this.value = bool;

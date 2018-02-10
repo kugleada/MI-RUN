@@ -105,7 +105,9 @@ public class TruffleReader  {
                 case "lambda":
                     frameDescriptors.push(new FrameDescriptor());
                     List<FrameSlot> formalParameters = new ArrayList<>();
+                    System.out.println("creating lambda");
                     for (Convertible arg : ((ListConvertible) this.list.get(1)).list) {
+                        System.out.println(((SymbolConvertible) arg).name);
                         formalParameters.add(((SymbolNode) arg.convert()).getSlot());
                     }
                     List<SchemeNode> bodyNodes = new ArrayList<>();
@@ -113,6 +115,8 @@ public class TruffleReader  {
                         bodyNodes.add(bodyConv.convert());
                     }
                     //bodyNodes.get(bodyNodes.size() - 1).setIsTail();
+                    //TODO kde se nastavi lexical scope?
+
 
                     SchemeFunction function = SchemeFunction.create(
                             formalParameters.toArray(new FrameSlot[] {}),

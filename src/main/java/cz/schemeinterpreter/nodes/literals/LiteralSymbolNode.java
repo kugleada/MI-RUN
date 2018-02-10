@@ -5,7 +5,7 @@ import cz.schemeinterpreter.nodes.SchemeNode;
 import cz.schemeinterpreter.types.SchemeSymbol;
 
 public class LiteralSymbolNode extends SchemeNode {
-        public final SchemeSymbol symbol;
+        private final SchemeSymbol symbol;
 
         public LiteralSymbolNode(SchemeSymbol symbol) {
             this.symbol = symbol;

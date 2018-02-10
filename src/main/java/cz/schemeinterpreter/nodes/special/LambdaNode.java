@@ -22,6 +22,8 @@ public abstract class LambdaNode extends SchemeNode {
     @Specialization(replaces = {"getScopedFunction"})
     public Object getSchemeFunction(VirtualFrame virtualFrame) {
         SchemeFunction function = this.getFunction();
+        //TODO problem with setting lexical scope
+        System.out.println("setting lexical scope in LambdaNode: " + virtualFrame.materialize());
         function.setLexicalScope(virtualFrame.materialize());
         return function;
     }

@@ -7,6 +7,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.DirectCallNode;
 import cz.schemeinterpreter.nodes.SchemeNode;
 import cz.schemeinterpreter.nodes.builtin.AddBuiltinNodeFactory;
+import cz.schemeinterpreter.nodes.builtin.SubBuiltinNodeFactory;
 import cz.schemeinterpreter.reader.TruffleReader;
 
 import cz.schemeinterpreter.types.SchemeFunction;
@@ -75,8 +76,11 @@ public class BasicSchemeMain {
         private static void runTestScheme() throws IOException {
             VirtualFrame topFrame = createTopFrame(TruffleReader.frameDescriptors.peek());
             //String source = "(define add (lambda (x y) (+ x y)))"; // (add 4 5)
-            //String source = "(define echo (lambda () 5)) (echo)";
-            String source = "((lambda (x) (+ x x)) 4)";
+            //String source = "(define echo (lambda (x) x)) (echo 5)"; //funguje
+            //String source = "(+ (+ (+ 1 2) (+ 3 4)) (+ (+ 5 6) (+ 7 8)))"; //funguje
+            //String source = "((lambda (x) (+ x x)) 4)";
+            String source = "((lambda (x y) (+ x y)) 4 5)";
+            //String source = "((lambda () (- 4 5)) )";
             InputStream streamIn = new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
             SchemeList<SchemeNode> nodes = TruffleReader.read(streamIn);
             System.out.println(execute(nodes, topFrame).toString());
@@ -106,6 +110,8 @@ public class BasicSchemeMain {
                 new Object[] {}, frameDescriptor);
         virtualFrame.setObject(frameDescriptor.addFrameSlot("+"),
                 createBuiltinFunction(AddBuiltinNodeFactory.getInstance()));
+        virtualFrame.setObject(frameDescriptor.addFrameSlot("-"),
+                createBuiltinFunction(SubBuiltinNodeFactory.getInstance()));
         // more buitins ...
         return virtualFrame;
     }

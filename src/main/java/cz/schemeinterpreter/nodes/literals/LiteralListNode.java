@@ -5,7 +5,7 @@ import cz.schemeinterpreter.nodes.SchemeNode;
 import cz.schemeinterpreter.types.SchemeList;
 
 public class LiteralListNode extends SchemeNode {
-    public final SchemeList<?> list;
+    private final SchemeList<?> list;
 
     public LiteralListNode(SchemeList<?> list) {
         this.list = list;

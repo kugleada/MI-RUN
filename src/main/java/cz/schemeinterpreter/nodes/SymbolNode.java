@@ -13,15 +13,30 @@ public class SymbolNode extends SchemeNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
+        System.out.println("slot:" + slot);
         Frame frame = virtualFrame;
+        System.out.println("frameDes:" + frame.getFrameDescriptor());
+        System.out.println("frame:" + frame);
+        System.out.println("arguments:" + frame.getArguments());
+        for (Object o: frame.getArguments()) {
+            System.out.println(o.getClass());
+        }
         Object value = frame.getValue(this.slot);
+        System.out.println("value:" + value);
         while (value == null) {
             frame = this.getLexicalScope(frame);
+            System.out.println("frameDes:" + frame.getFrameDescriptor());
+            System.out.println("frame:" + frame);
+            System.out.println("arguments:" + frame.getArguments().toString());
+            for (Object o: frame.getArguments()) {
+                System.out.println(o.getClass());
+            }
             if (frame == null) {
                 throw new RuntimeException("Unknown variable: " +
                         this.slot.getIdentifier());
             }
             value = frame.getValue(this.slot); //ERROR
+            System.out.println("value:" + value);
         }
         return value;
     }

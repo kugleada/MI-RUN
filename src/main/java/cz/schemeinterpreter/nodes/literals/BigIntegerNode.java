@@ -6,7 +6,7 @@ import cz.schemeinterpreter.nodes.SchemeNode;
 import java.math.BigInteger;
 
 public class BigIntegerNode extends SchemeNode {
-    public final BigInteger number;
+    private final BigInteger number;
 
     public BigIntegerNode(BigInteger number) {
         this.number = number;
