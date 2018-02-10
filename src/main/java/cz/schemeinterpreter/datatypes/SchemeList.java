@@ -27,7 +27,7 @@ public class SchemeList extends SchemeNode implements Iterable<SchemeNode> {
             this.length = cdr.length + 1;
         }
 
-        //@SafeVarargs
+        @SafeVarargs
         public static SchemeList list(SchemeNode... objs) {
             return list(asList(objs));
         }

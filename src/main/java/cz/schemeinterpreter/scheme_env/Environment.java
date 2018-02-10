@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 
 public class Environment {
+
     private final HashMap<String, Object> env = new HashMap<String, Object>();
 
     private final Environment parent;
