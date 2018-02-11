@@ -1,19 +1,10 @@
 package tscheme.truffle;
 
 
-import com.oracle.truffle.api.CallTarget;
-import com.oracle.truffle.api.Truffle;
-import com.oracle.truffle.api.source.Source;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import tscheme.truffle.helpers.TEnvironment;
-import tscheme.truffle.helpers.TEnvironmentBuilder;
 import tscheme.truffle.nodetypes.TSchemeNode;
-import tscheme.truffle.nodetypes.TSchemeRootNode;
-import tscheme.truffle.parser.Converter;
-import tscheme.truffle.parser.Reader;
-import tscheme.truffle.syntax.ListSyntax;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,13 +18,16 @@ public class FibonacciTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"(define fibon (lambda (n) (if (< n 2) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 1)", "1"},
-                {"(define fibon (lambda (n) (if (< n 2) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 2)", "2"},
-                {"(define fibon (lambda (n) (if (< n 2) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 3)", "3"},
-                {"(define fibon (lambda (n) (if (< n 2) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 4)", "5"},
-                {"(define fibon (lambda (n) (if (< n 2) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 5)", "8"},
-                {"(define fibon (lambda (n) (if (< n 2) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 6)", "13"},
-                {"(define fibon (lambda (n) (if (< n 2) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 7)", "21"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 1)", "1"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 2)", "1"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 3)", "2"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 4)", "3"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 5)", "5"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 6)", "8"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 7)", "13"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 8)", "21"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 9)", "34"},
+                {"(define fibon (lambda (n) (if (< n 3) 1 (+ (fibon (- n 1)) (fibon (- n 2)))))) (fibon 10)", "55"},
         });
     }
 

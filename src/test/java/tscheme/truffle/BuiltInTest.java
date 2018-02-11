@@ -1,18 +1,9 @@
 package tscheme.truffle;
 
-import com.oracle.truffle.api.CallTarget;
-import com.oracle.truffle.api.Truffle;
-import com.oracle.truffle.api.source.Source;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import tscheme.truffle.helpers.TEnvironment;
-import tscheme.truffle.helpers.TEnvironmentBuilder;
 import tscheme.truffle.nodetypes.TSchemeNode;
-import tscheme.truffle.nodetypes.TSchemeRootNode;
-import tscheme.truffle.parser.Converter;
-import tscheme.truffle.parser.Reader;
-import tscheme.truffle.syntax.ListSyntax;
 
 import java.util.Arrays;
 import java.util.Collection;

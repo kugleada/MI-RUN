@@ -51,12 +51,12 @@ public class TSchemeRootNode extends RootNode {
 
     /**
      * Execution of root node.
-     * @param virtualFrame Scope.
+     * @param frame Scope.
      * @return Result of execution of last node (child).
      */
     @Override
     @ExplodeLoop
-    public Object execute(VirtualFrame virtualFrame) {
+    public Object execute(VirtualFrame frame) {
 /*
         System.out.println("Executing root nodetypes with frame: " + virtualFrame);
 
@@ -72,11 +72,11 @@ public class TSchemeRootNode extends RootNode {
         // execute body except for last one
         for (int i=0; i < lastNode; ++i) {
             //System.out.println(".");
-            this.bodyNodes[i].executeGeneric(virtualFrame);
+            this.bodyNodes[i].executeGeneric(frame);
         }
 
         // execute last one and return its return value
-        return this.bodyNodes[lastNode].executeGeneric(virtualFrame);
+        return this.bodyNodes[lastNode].executeGeneric(frame);
     }
 
     public static TSchemeRootNode create(FrameSlot[] argumentNames,

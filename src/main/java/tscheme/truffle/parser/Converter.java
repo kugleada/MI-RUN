@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 import tscheme.truffle.Environment;
-import tscheme.truffle.helpers.TEnvironment;
 import tscheme.truffle.nodetypes.TSchemeNode;
 import tscheme.truffle.nodetypes.literals.*;
 import tscheme.truffle.syntax.*;

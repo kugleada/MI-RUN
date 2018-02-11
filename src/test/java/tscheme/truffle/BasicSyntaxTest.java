@@ -18,9 +18,9 @@ public class BasicSyntaxTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"(define a 20) a", "20"},
-                {"((lambda (x) (* x x)) 2)", "4"},
-                {"(define square (lambda (x) (* x x))) (square 3)", "9"},
+                {"(define a 20) a", "20"}, // definition
+                {"((lambda (x) (* x x)) 2)", "4"}, // lambda call
+                {"(define square (lambda (x) (* x x))) (square 3)", "9"}, // lambda definition and call
                 {"(define a 5) (define b a) (define a \"ahoj\") b", "5" } //redefinition test
         });
     }

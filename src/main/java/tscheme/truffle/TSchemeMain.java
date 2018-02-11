@@ -1,23 +1,15 @@
 package tscheme.truffle;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 
 import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.frame.MaterializedFrame;
 
-import com.oracle.truffle.api.source.Source;
 import com.oracle.truffle.api.Truffle;
 
-import tscheme.truffle.helpers.TEnvironment;
-import tscheme.truffle.helpers.TEnvironmentBuilder;
 import tscheme.truffle.nodetypes.TSchemeNode;
 import tscheme.truffle.nodetypes.TSchemeRootNode;
-import tscheme.truffle.parser.Converter;
-import tscheme.truffle.parser.Reader;
-import tscheme.truffle.syntax.ListSyntax;
 import tscheme.truffle.datatypes.TSchemeList;
 
 public class TSchemeMain {
@@ -82,12 +74,12 @@ public class TSchemeMain {
         }
     }
 
-    public static Object createRootAndExecute(TSchemeNode[] nodes, MaterializedFrame globalFrame) {
-        TSchemeRootNode root = new TSchemeRootNode(nodes, globalFrame.getFrameDescriptor());
+    public static Object createRootAndExecute(TSchemeNode[] nodes, MaterializedFrame frame) {
+        TSchemeRootNode root = new TSchemeRootNode(nodes, frame.getFrameDescriptor());
 
         CallTarget ct = Truffle.getRuntime().createCallTarget(root);
 
-        Object ret =  ct.call(globalFrame);
+        Object ret =  ct.call(frame);
 
         return ret;
     }
