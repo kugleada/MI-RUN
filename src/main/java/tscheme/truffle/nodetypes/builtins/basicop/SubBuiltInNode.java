@@ -15,7 +15,7 @@ import java.math.BigInteger;
 @GenerateNodeFactory
 public abstract class SubBuiltInNode extends BuiltInNode {
 
-    @Specialization
+    @Specialization(rewriteOn = ArithmeticException.class)
     protected long minus(long left, long right) {
         return (left - right);
     }
@@ -30,7 +30,6 @@ public abstract class SubBuiltInNode extends BuiltInNode {
         return (left - right);
     }
 
-    /* Not needed anymore thanks to implicit cast.
     @Specialization
     protected double minus(double left, long right) {
         return (left - ((double) right));
@@ -40,5 +39,4 @@ public abstract class SubBuiltInNode extends BuiltInNode {
     protected double minus(double left, BigInteger right) {
         return (left - right.doubleValue());
     }
-    */
 }

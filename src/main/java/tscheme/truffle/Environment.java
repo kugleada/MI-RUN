@@ -22,7 +22,7 @@ public class Environment {
         this.globalNamespace = new Namespace(this.globalFrameDescriptor);
         this.globalFrame = this.initGlobalFrame();
 
-        System.out.println("Global context: " + this.globalFrame);
+        //System.out.println("Global context: " + this.globalFrame);
     }
 
     private MaterializedFrame initGlobalFrame() {
@@ -41,13 +41,9 @@ public class Environment {
 
         functions.forEach((k, v) -> virtualFrame.setObject(frameDescriptor.addFrameSlot(k),v));
 
-        System.out.println("Built-in methods in: " + virtualFrame.getFrameDescriptor());
+        //System.out.println("Built-in methods in: " + virtualFrame.getFrameDescriptor());
     }
 
-    /**
-     * @return A {@link MaterializedFrame} on the heap that contains all global
-     * values.
-     */
     public MaterializedFrame getGlobalFrame() {
         return this.globalFrame;
     }

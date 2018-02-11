@@ -14,8 +14,6 @@ public class LitDoubleNode extends TSchemeNode {
     public LitDoubleNode(DoubleSyntax syntax) {
 
         this.number = syntax.getValue();
-
-        setSourceSection(syntax.getSourceSection());
     }
 
     /**

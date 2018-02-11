@@ -19,8 +19,6 @@ public class LitBooleanNode extends TSchemeNode {
     public LitBooleanNode(BooleanSyntax bool) {
 
         this.value = bool.getValue();
-
-        setSourceSection(bool.getSourceSection());
     }
 
     /**

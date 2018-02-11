@@ -18,22 +18,21 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @RunWith(Parameterized.class)
-public class TSchemeMainTest {
+public class FactorialTest {
 
-    @Test
-    public void testItTest()
-    {
-        assertNull(null);
-    }
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"((lambda (x) (* x x)) 2)", "4"},
-                {"(define square (lambda (x) (* x x))) (square 3)", "9"},
+                {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 1)", "1"},
+                {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 2)", "2"},
+                {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 3)", "6"},
+                {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 4)", "24"},
+                {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 5)", "120"},
+                {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 10)", "3628800"},
+                {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 15)", "1307674368000"},
         });
     }
 
@@ -41,20 +40,21 @@ public class TSchemeMainTest {
 
     private String expectedOutput;
 
-    public TSchemeMainTest (String input, String expected)
+    public FactorialTest(String input, String expected)
     {
         functionInput = input;
         expectedOutput = expected;
     }
 
     @Test
-    public void testFactorial() throws Exception {
+    public void testBuiltIns() throws Exception {
 
         Environment context = new Environment();
 
         TEnvironment environment = new TEnvironmentBuilder().createEnvironment();
 
         String sourceCode = functionInput;
+
         Source source = Source.newBuilder(sourceCode).name("<stdin>").mimeType(TSchemeLanguage.MIME_TYPE).build();
 
         ListSyntax synExpressions = Reader.read(source);
@@ -64,6 +64,7 @@ public class TSchemeMainTest {
         TSchemeNode[] nodes = converter.convertSexp(context, synExpressions, environment);
 
         TSchemeRootNode root = new TSchemeRootNode(nodes, context.getGlobalFrame().getFrameDescriptor());
+
         CallTarget ct = Truffle.getRuntime().createCallTarget(root);
 
         Object ret =  ct.call(context.getGlobalFrame());

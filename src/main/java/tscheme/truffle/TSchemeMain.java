@@ -1,6 +1,8 @@
 package tscheme.truffle;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 
 import com.oracle.truffle.api.CallTarget;
@@ -22,7 +24,13 @@ public class TSchemeMain {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Running on: " + Truffle.getRuntime().getName());
-        startREPL();
+        if(args.length > 0)
+        {
+            runTSchemeFromFile(args[0]);
+        }
+        else {
+            startREPL();
+        }
     }
 
     private static void startREPL() throws Exception {
@@ -54,57 +62,68 @@ public class TSchemeMain {
 
             // Read input - contains lexing, parsing, etc.
             ListSyntax synExpressions = Reader.read(source);
-            System.out.println("ListSyntax: " + synExpressions);
+            //System.out.println(synExpressions);
 
-            Converter converter = new Converter(false);
+            Converter converter = new Converter();
 
             TSchemeNode[] nodes = converter.convertSexp(context, synExpressions, environment);
 
-
-            System.out.println("Nodes read:");
-            for (TSchemeNode a : nodes) {
-                System.out.println(a.getClass());
-            }
-
+            //System.out.println("Nodes size:" + nodes.length);
+            //System.out.println(nodes[0].toString());
+            //System.out.println(nodes[0].getClass());
             // EVAL
             Object result = execute(nodes, context.getGlobalFrame());
-
             // PRINT
             if (result != TSchemeList.EMPTY) {
-                System.out.println(result);
+                System.out.println("Result: " + result);
             }
         }
     }
 
-    private static void runMumbler(String filename) throws Exception {
-        /*Source source = Source.newBuilder(filename).name("<file>").mimeType(TSchemeLanguage.MIME_TYPE).build();
-        Environment context = new Environment();
-        ListSyntax sexp = Reader.read(source);
-        Converter converter = new Converter(true); // true - tail optimization enabled
-        TSchemeNode[] nodes = converter.convertSexp(context, sexp);
+    private static void runTSchemeFromFile(String filename) throws Exception {
+        String sourceCode = "";
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
 
-        execute(nodes, context.getGlobalFrame());*/
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            sourceCode = sb.toString();
+        } finally {
+            br.close();
+        }
+
+        Source source = Source.newBuilder(sourceCode).name("<file>").mimeType(TSchemeLanguage.MIME_TYPE).build();
+
+        Environment context = new Environment();
+        TEnvironment env = new TEnvironmentBuilder().createEnvironment();
+
+        ListSyntax sexp = Reader.read(source);
+        System.out.println(sexp);
+        Converter converter = new Converter(); // true - tail optimization enabled
+
+        TSchemeNode[] nodes = converter.convertSexp(context, sexp, env);
+
+        Object result = execute(nodes, context.getGlobalFrame());
+
+        if (result != TSchemeList.EMPTY) {
+            System.out.println(result);
+        }
     }
 
     private static Object execute(TSchemeNode[] nodes, MaterializedFrame globalFrame) {
-
-        System.out.println("To execute: ");
-        System.out.println(nodes);
-
-        System.out.println("Global frame:");
-        System.out.println(globalFrame);
-
-        System.out.println("Creating root nodetypes ...");
         TSchemeRootNode root = new TSchemeRootNode(nodes, globalFrame.getFrameDescriptor());
-        System.out.println("Root nodetypes created ...");
 
         CallTarget ct = Truffle.getRuntime().createCallTarget(root);
 
-
         Object ret =  ct.call(globalFrame);
 
-        System.out.println(ret.getClass());
-        System.out.println(ret);
+        //System.out.println(ret.getClass());
+        //System.out.println(ret);
 
         return ret;
 

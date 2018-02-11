@@ -1,29 +1,35 @@
 package tscheme.truffle.nodetypes.builtins.print;
 
-import tscheme.truffle.nodetypes.builtins.BuiltInNode;
-
 import com.oracle.truffle.api.dsl.GenerateNodeFactory;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
 
-@NodeInfo(shortName = "println")
+import tscheme.truffle.nodetypes.builtins.BuiltInNode;
+
+@NodeInfo(shortName = "printvar")
 @GenerateNodeFactory
 public abstract class PrintVarBuiltInNode extends BuiltInNode {
 
     @Specialization
-    public long println(long value) {
+    public long printvar(long value) {
         System.out.println(value);
         return value;
     }
 
     @Specialization
-    public boolean println(boolean value) {
+    public boolean printvar(boolean value) {
         System.out.println(value);
         return value;
     }
 
     @Specialization
-    public Object println(Object value) {
+    public double printvar(double value) {
+        System.out.println(value);
+        return value;
+    }
+
+    @Specialization
+    public Object printvar(Object value) {
         System.out.println(value);
         return value;
     }

@@ -23,12 +23,17 @@ public class InvokeNode extends TSchemeNode {
     @Child protected DispatchNode dispatchNode;
 
     public InvokeNode(TSchemeNode functionNode,
-                      TSchemeNode[] argumentNodes,
-            SourceSection sourceSection) {
+                      TSchemeNode[] argumentNodes) {
+
         this.functionNode = functionNode;
         this.argumentNodes = argumentNodes;
         this.dispatchNode = new UninitializedDispatchNode();
-        setSourceSection(sourceSection);
+    }
+
+    @Override
+    public String toString() {
+        return "InvokeNode: (apply " + this.functionNode + " " +
+                Arrays.toString(this.argumentNodes) + ")";
     }
 
     @Override
@@ -36,11 +41,15 @@ public class InvokeNode extends TSchemeNode {
     public Object executeGeneric(VirtualFrame virtualFrame) {
         TSchemeFunction function = this.evaluateFunction(virtualFrame);
         CompilerAsserts.compilationConstant(this.argumentNodes.length);
-        CompilerAsserts.compilationConstant(this.isTail());
+
+        /*System.out.println("Invoke node:");
+        System.out.println(this);
+        System.out.println("Args:");*/
 
         Object[] argumentValues = new Object[this.argumentNodes.length + 1];
         argumentValues[0] = function.getLexicalScope();
         for (int i=0; i<this.argumentNodes.length; i++) {
+            //System.out.println(this.argumentNodes[i]);
             argumentValues[i+1] = this.argumentNodes[i].executeGeneric(virtualFrame);
         }
 
@@ -62,9 +71,4 @@ public class InvokeNode extends TSchemeNode {
         }
     }
 
-    @Override
-    public String toString() {
-        return "(apply " + this.functionNode + " " +
-                Arrays.toString(this.argumentNodes) + ")";
-    }
 }

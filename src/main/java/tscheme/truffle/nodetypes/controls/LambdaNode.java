@@ -8,33 +8,33 @@ import com.oracle.truffle.api.dsl.NodeField;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
+/**
+ * Represents lambda function, represented as node in AST.
+ */
 @NodeField(name = "function", type = TSchemeFunction.class)
 public abstract class LambdaNode extends TSchemeNode {
-    public abstract TSchemeFunction getFunction();
 
-    private boolean scopeSet = false;
+    public abstract TSchemeFunction getFunction(); //< get function that is represented by this lambda
 
+    private boolean scopeSetFlag = false; //< flag, checks if scope of this function is set
     protected boolean isScopeSet() {
-        return this.scopeSet;
+        return this.scopeSetFlag;
     }
 
     @Specialization(guards = "isScopeSet()")
-    public TSchemeFunction getScopedFunction(VirtualFrame virtualFrame) {
+    public TSchemeFunction getFunctionWithScope(VirtualFrame virtualFrame) {
         return this.getFunction();
     }
 
-    @Specialization(replaces = { "getScopedFunction" })
+    @Specialization(replaces = { "getFunctionWithScope" })
     public Object getMumblerFunction(VirtualFrame virtualFrame) {
         TSchemeFunction function = this.getFunction();
-        function.setLexicalScope(virtualFrame.materialize());
+        function.setLexicalScope(virtualFrame.materialize()); // materialized frame, VF can't be accessed from heap
         return function;
     }
 
     /**
-     * The lambda expression is being set to a variable. Give the lambda the
-     * name of the variable. Don't overwrite lambdas with existing names.
-     *
-     * @param name The name for the lambda.
+     * Set name to this lambda.
      */
     public void setName(String name) {
         ((TSchemeRootNode) this.getFunction().callTarget.getRootNode())

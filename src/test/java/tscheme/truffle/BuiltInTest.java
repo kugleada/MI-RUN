@@ -21,19 +21,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @RunWith(Parameterized.class)
-public class TSchemeMainTest {
+public class BuiltInTest {
 
-    @Test
-    public void testItTest()
-    {
-        assertNull(null);
-    }
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"((lambda (x) (* x x)) 2)", "4"},
-                {"(define square (lambda (x) (* x x))) (square 3)", "9"},
+                {"(+ 9 15)", "24"},
+                {"(- 5 3)", "2"},
+                {"(* 9 4)", "36"},
+                {"(/ 6 3)", "2"},
+                {"(% 5 2)", "1"},
+                {"(printvar 2)", "2"},
+                {"(car '(1 2 3))", "1"},
+                {"(cdr '(1 2 3))", "(2 3)"},
         });
     }
 
@@ -41,20 +42,21 @@ public class TSchemeMainTest {
 
     private String expectedOutput;
 
-    public TSchemeMainTest (String input, String expected)
+    public BuiltInTest(String input, String expected)
     {
         functionInput = input;
         expectedOutput = expected;
     }
 
     @Test
-    public void testFactorial() throws Exception {
+    public void testBuiltIns() throws Exception {
 
         Environment context = new Environment();
 
         TEnvironment environment = new TEnvironmentBuilder().createEnvironment();
 
         String sourceCode = functionInput;
+
         Source source = Source.newBuilder(sourceCode).name("<stdin>").mimeType(TSchemeLanguage.MIME_TYPE).build();
 
         ListSyntax synExpressions = Reader.read(source);
@@ -64,6 +66,7 @@ public class TSchemeMainTest {
         TSchemeNode[] nodes = converter.convertSexp(context, synExpressions, environment);
 
         TSchemeRootNode root = new TSchemeRootNode(nodes, context.getGlobalFrame().getFrameDescriptor());
+
         CallTarget ct = Truffle.getRuntime().createCallTarget(root);
 
         Object ret =  ct.call(context.getGlobalFrame());

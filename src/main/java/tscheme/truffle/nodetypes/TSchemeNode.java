@@ -19,30 +19,8 @@ import com.oracle.truffle.api.nodes.UnexpectedResultException;
 import com.oracle.truffle.api.source.SourceSection;
 
 @TypeSystemReference(TSchemeDataTypes.class)
-@NodeInfo(language = "TScheme lang", description = "Abstract base node.")
+@NodeInfo(language = "TScheme language", description = "Abstract base node.")
 public abstract class TSchemeNode extends Node {
-    @CompilationFinal
-    private SourceSection sourceSection;
-
-    @CompilationFinal
-    private boolean isTail = false;
-
-    @Override
-    public SourceSection getSourceSection() {
-    	return this.sourceSection;
-    }
-
-    public void setSourceSection(SourceSection sourceSection) {
-    	this.sourceSection = sourceSection;
-    }
-
-    public boolean isTail() {
-        return this.isTail;
-    }
-
-    public void setIsTail() {
-        this.isTail = true;
-    }
 
     public abstract Object executeGeneric(VirtualFrame virtualFrame);
 

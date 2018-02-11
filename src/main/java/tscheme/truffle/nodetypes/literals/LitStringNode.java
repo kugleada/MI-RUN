@@ -19,8 +19,6 @@ public class LitStringNode extends TSchemeNode {
     public LitStringNode(StringSyntax string) {
 
         this.string = string.getValue(); // get value of string that was read
-
-        setSourceSection(string.getSourceSection()); // set the source section of the string
     }
 
     /**

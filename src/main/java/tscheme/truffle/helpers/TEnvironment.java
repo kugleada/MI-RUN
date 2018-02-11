@@ -21,7 +21,7 @@ public class TEnvironment {
     }
 
     private void initializeBuiltins() {
-        System.out.println("Initialized builtins for frame " + baseFrame + " with descriptor " + baseFrameDescriptor);
+        //System.out.println("Initialized builtins for frame " + baseFrame + " with descriptor " + baseFrameDescriptor);
     }
 
 

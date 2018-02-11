@@ -9,8 +9,13 @@ import com.oracle.truffle.api.frame.VirtualFrame;
  * Class for representing NODE of List in AST.
  */
 public class LitListNode extends TSchemeNode {
-    public final TSchemeList<?> list;
 
+    public final TSchemeList<?> list; //< list to be represented
+
+    /**
+     * Constructs list literal.
+     * @param list
+     */
     public LitListNode(TSchemeList<?> list) {
         this.list = list;
     }

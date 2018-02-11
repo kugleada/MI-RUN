@@ -29,7 +29,6 @@ public class TSchemeRootNode extends RootNode {
                            FrameDescriptor frameDescriptor) {
         super(null, frameDescriptor);
         this.bodyNodes = bodyNodes;
-        System.out.println("RootNode:" + frameDescriptor);
     }
 
     @Override
@@ -46,19 +45,19 @@ public class TSchemeRootNode extends RootNode {
     @Override
     @ExplodeLoop
     public Object execute(VirtualFrame virtualFrame) {
-
+/*
         System.out.println("Executing root nodetypes with frame: " + virtualFrame);
 
         System.out.println("Current frame: " + Truffle.getRuntime().getCurrentFrame());
-
+*/
         int last = this.bodyNodes.length - 1;
 
         CompilerAsserts.compilationConstant(last);
 
-        System.out.println("Caller frame: " + Truffle.getRuntime().getCallerFrame());
+        //System.out.println("Caller frame: " + Truffle.getRuntime().getCallerFrame());
 
         for (int i=0; i<last; i++) {
-            System.out.println(".");
+            //System.out.println(".");
             this.bodyNodes[i].executeGeneric(virtualFrame);
         }
 

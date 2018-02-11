@@ -20,18 +20,36 @@ import com.oracle.truffle.api.dsl.TypeSystem;
 public class TSchemeDataTypes { // datatypes definition for our language
 
     @ImplicitCast // implicit cast from long to BigInteger
-    public static BigInteger castBigInteger(long value) {
+    public static BigInteger castLongToBigInteger(long value) {
         return BigInteger.valueOf(value);
     }
 
+    @ImplicitCast // implicit cast from long to String
+    public static String castLongToString(long value) {
+        return Long.toString(value,10);
+    }
+
+    @ImplicitCast // implicit cast from BigInteger to String
+    public static String castBigIntegerToString(BigInteger value) {
+        return value.toString(10);
+    }
+
+    @ImplicitCast // implicit cast from Double to String
+    public static String castDoubleToString(double value) {
+        return Double.toString(value);
+    }
+
+    /*
     @ImplicitCast // implicit cast from long to double, possible loss of precision
     public static double castLongToDouble(long value) {
         return ((double) value);
     }
+    */
 
+    /* Sometimes causes problems with converting large enough BigInteger by double, causing it to reach Infinity.
     @ImplicitCast // implicit cast from BigInteger to double, possible loss of precision
     public static double castBigIntegerToDouble(BigInteger value) {
         return (value.doubleValue());
     }
-
+    */
 }

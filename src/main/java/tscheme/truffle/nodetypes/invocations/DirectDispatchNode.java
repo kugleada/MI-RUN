@@ -22,8 +22,9 @@ public class DirectDispatchNode extends DispatchNode {
     @Override
     protected Object executeDispatch(VirtualFrame frame, CallTarget callTarget,
             Object[] arguments) {
+        //System.out.println("Executing dispatch:");
         if (this.cachedCallTarget == callTarget) {
-            this.callCachedTargetNode.call(arguments);
+            return this.callCachedTargetNode.call(arguments);
         }
         return this.nextNode.executeDispatch(frame, callTarget, arguments);
     }

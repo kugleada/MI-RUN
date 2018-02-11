@@ -20,7 +20,6 @@ public class LitBigIntegerNode extends TSchemeNode {
      */
     public LitBigIntegerNode(BigIntegerSyntax number) {
         this.value = number.getValue();
-        setSourceSection(number.getSourceSection());
     }
 
     /**

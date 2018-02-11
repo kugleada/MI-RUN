@@ -15,8 +15,6 @@ public class LitLongIntegerNode extends TSchemeNode {
     public LitLongIntegerNode(LongIntegerSyntax syntax) {
 
         this.number = syntax.getValue();
-
-        setSourceSection(syntax.getSourceSection());
     }
 
     /**

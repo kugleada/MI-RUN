@@ -19,7 +19,6 @@ import com.oracle.truffle.api.source.SourceSection;
 
 import tscheme.truffle.helpers.TSchemeException;
 import tscheme.truffle.nodetypes.invocations.InvokeNode;
-import tscheme.truffle.nodetypes.invocations.TCOInvokeNode;
 import tscheme.truffle.nodetypes.read.ClosureSymbolNodeGen;
 import tscheme.truffle.nodetypes.read.GlobalSymbolNodeGen;
 import tscheme.truffle.nodetypes.read.LocalSymbolNodeGen;
@@ -38,10 +37,7 @@ public class Converter {
 
     private Analyzer analyzer;
 
-    private final boolean isTailCallOptimizationEnabled;
-
-    public Converter(boolean tailCallOptimizationEnabled) {
-        this.isTailCallOptimizationEnabled = tailCallOptimizationEnabled;
+    public Converter() {
     }
 
     public TSchemeNode[] convertSexp(Environment context, ListSyntax sexp, TEnvironment env) {
@@ -73,7 +69,6 @@ public class Converter {
         } else if (syntax instanceof StringSyntax) {
             return convert((StringSyntax) syntax);
         } else if (syntax instanceof SymbolSyntax) {
-
             return convert((SymbolSyntax) syntax, ns, env);
         } else if (syntax instanceof ListSyntax) {
             return convert((ListSyntax) syntax, ns, env);
@@ -121,7 +116,7 @@ public class Converter {
         } else {
             node = ClosureSymbolNodeGen.create(pair.b, pair.a);
         }
-        node.setSourceSection(syntax.getSourceSection());
+
         return node;
     }
 
@@ -145,22 +140,21 @@ public class Converter {
                 return convertQuote(syntax, ns, env);
             }
         }
-        return convertInvoke(list, syntax.getSourceSection(), ns, env);
+        return convertInvoke(list, ns, env);
     }
 
     private InvokeNode convertInvoke(TSchemeList<? extends Syntax<? extends Object>> list,
-                                     SourceSection sourceSection, Namespace ns, TEnvironment env) {
+                                     Namespace ns, TEnvironment env) {
 
         TSchemeNode functionNode = convert(list.car(), ns, env);
+
         TSchemeNode[] arguments = StreamSupport
                 .stream(list.cdr().spliterator(), false)
                 .map(syn-> convert(syn, ns, env))
                 .toArray(size -> new TSchemeNode[size]);
-        if (isTailCallOptimizationEnabled) {
-            return new TCOInvokeNode(functionNode, arguments, sourceSection);
-        } else {
-            return new InvokeNode(functionNode, arguments, sourceSection);
-        }
+
+        return new InvokeNode(functionNode, arguments);
+
     }
 
     private DefineNode convertDefine(ListSyntax syntax, Namespace ns, TEnvironment env) {
@@ -169,7 +163,6 @@ public class Converter {
         FrameSlot nameSlot = ns.getIdentifier(symSyntax.getValue().name).b;
         TSchemeNode valueNode = convert(list.cdr().cdr().car(), ns, env);
         DefineNode node = DefineNodeGen.create(valueNode, nameSlot);
-        node.setSourceSection(syntax.getSourceSection());
         if (valueNode instanceof LambdaNode) {
             // TODO : not good enough. if there's an error in the lambda,
             // the name won't be used. Have to pass name
@@ -194,14 +187,11 @@ public class Converter {
             bodyNodes.add(convert(body, lambdaNs, env));
         }
 
-        bodyNodes.get(bodyNodes.size() - 1).setIsTail();
-
         TSchemeFunction function = new TSchemeFunction(
                 formalParameters.toArray(new FrameSlot[] {}),
                 bodyNodes.toArray(new TSchemeNode[] {}),
                 lambdaNs.getFrameDescriptor());
         LambdaNode node = LambdaNodeGen.create(function);
-        node.setSourceSection(syntax.getSourceSection());
         return node;
     }
 
@@ -210,8 +200,7 @@ public class Converter {
     	TSchemeList<? extends Syntax<? extends Object>> list = syntax.getValue();
         return new IfNode(convert(list.cdr().car(), ns, env),
                 convert(list.cdr().cdr().car(), ns, env),
-                convert(list.cdr().cdr().cdr().car(), ns, env),
-                syntax.getSourceSection());
+                convert(list.cdr().cdr().cdr().car(), ns, env));
     }
 
     private static QuoteNode convertQuote(ListSyntax syntax,

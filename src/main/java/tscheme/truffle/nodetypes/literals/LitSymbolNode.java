@@ -18,7 +18,6 @@ public class LitSymbolNode extends TSchemeNode {
      */
     public LitSymbolNode(SymbolSyntax symbol) {
         this.symbol = symbol.getValue();
-        setSourceSection(symbol.getSourceSection());
     }
 
     /**

@@ -77,7 +77,7 @@ public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
 
         for (TSchemeParser.FormContext form : ctx.form()) {
             forms.add(this.visit(form));
-            System.out.println("Visited: " + form.getClass());
+            //System.out.println("Visited: " + form.getClass());
         }
 
         return new ListSyntax(TSchemeList.list(forms),

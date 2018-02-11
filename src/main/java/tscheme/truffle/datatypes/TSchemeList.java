@@ -100,13 +100,13 @@ public class TSchemeList<Datatype> implements Iterable<Datatype> {
         }
 
         // the left-most
-        StringBuilder stringRepresentation = new StringBuilder("TSchemeList: (" + this.car);
+        StringBuilder stringRepresentation = new StringBuilder("(" + this.car);
 
         // and the rest
         TSchemeList<Datatype> tmp = this.cdr;
 
         while (tmp != null && tmp != EMPTY) {
-            stringRepresentation.append(" - ");
+            stringRepresentation.append(" ");
             stringRepresentation.append(tmp.car);
             tmp = tmp.cdr;
         }

@@ -7,7 +7,13 @@
 3. Unzip the GraalVM to ./graalvm (./graalvm should contain folders like bin, jre, lib, ...)
 4. Set JAVA_HOME to <absolute path to MI-RUN>/MI-RUN/graalvm (i.e. export JAVA_HOME=/home/jn/run/gitk/MI-RUN/graalvm) - this points to special JDK, maven will call it during build
 
-## Build program:
+## Build program WITHOUT tests:
+
+```
+$ mvn -Dmaven.test.skip=true install (or package, or clean install)
+```
+
+## Build program WITH tests:
 
 ```
 $ mvn package (or clean install: mvn clean install)

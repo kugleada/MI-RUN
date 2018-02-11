@@ -15,7 +15,6 @@ import tscheme.truffle.nodetypes.builtins.basicop.MulBuiltInNodeFactory;
 import tscheme.truffle.nodetypes.builtins.basicop.SubBuiltInNodeFactory;
 import tscheme.truffle.nodetypes.builtins.helpers.CarBuiltInNodeFactory;
 import tscheme.truffle.nodetypes.builtins.helpers.CdrBuiltInNodeFactory;
-import tscheme.truffle.nodetypes.builtins.helpers.ListBuiltInNodeFactory;
 import tscheme.truffle.nodetypes.builtins.print.PrintVarBuiltInNodeFactory;
 import tscheme.truffle.nodetypes.builtins.relationop.EqualBuiltInNodeFactory;
 import tscheme.truffle.nodetypes.builtins.relationop.GreaterThanBuiltInNodeFactory;
@@ -82,7 +81,6 @@ public class BuiltInCreator {
         functions.put(">", createSchemeBuiltinFunction(GreaterThanBuiltInNodeFactory.getInstance()));
 
         // helpers - list operators etc.
-        functions.put("list", createSchemeBuiltinFunction(ListBuiltInNodeFactory.getInstance()));
         functions.put("car", createSchemeBuiltinFunction(CarBuiltInNodeFactory.getInstance()));
         functions.put("cdr", createSchemeBuiltinFunction(CdrBuiltInNodeFactory.getInstance()));
 
