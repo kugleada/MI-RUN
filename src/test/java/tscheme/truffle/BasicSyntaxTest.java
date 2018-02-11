@@ -21,7 +21,7 @@ public class BasicSyntaxTest {
                 {"(define a 20) a", "20"},
                 {"((lambda (x) (* x x)) 2)", "4"},
                 {"(define square (lambda (x) (* x x))) (square 3)", "9"},
-
+                {"(define a 5) (define b a) (define a \"ahoj\") b", "5" } //redefinition test
         });
     }
 
