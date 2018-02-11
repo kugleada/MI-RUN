@@ -8,20 +8,49 @@ import com.oracle.truffle.api.frame.FrameSlotTypeException;
 import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.ExplodeLoop;
 
+/**
+ * Specialized class for closure storage, with specializations.
+ */
 @NodeField(name = "depth", type = int.class)
 public abstract class ClosureSymbolNode extends SymbolNode {
 
-    /**
-     * Functional interface to get right datatypes out of {@link VirtualFrame}.
-     */
-    public static interface FrameGet<T> {
-        public T get(Frame frame, FrameSlot slot) throws FrameSlotTypeException;
+    // Getter for closure slots.
+    public interface FrameGet<DataType> {
+        DataType get(Frame frame, FrameSlot slot) throws FrameSlotTypeException;
+    }
+
+    @Specialization(rewriteOn = FrameSlotTypeException.class)
+    protected long readLong(VirtualFrame frame)
+            throws FrameSlotTypeException {
+        return this.readUpFrameStack(Frame::getLong, frame);
+    }
+
+    @Specialization(rewriteOn = FrameSlotTypeException.class)
+    protected boolean readBoolean(VirtualFrame frame)
+            throws FrameSlotTypeException {
+        return this.readUpFrameStack(Frame::getBoolean, frame);
+    }
+
+    @Specialization(rewriteOn = FrameSlotTypeException.class)
+    protected Object readObject(VirtualFrame frame)
+            throws FrameSlotTypeException {
+        return this.readUpFrameStack(Frame::getObject, frame);
+    }
+
+    @Specialization(replaces = { "readLong", "readBoolean", "readObject" })
+    protected Object read(VirtualFrame frame) {
+        try {
+            return this.readUpFrameStack(Frame::getValue, frame);
+        } catch (FrameSlotTypeException e) {
+        }
+        return null;
     }
 
     public abstract int getDepth();
 
+    //
     @ExplodeLoop
-    public <T> T readUpStack(FrameGet<T> getter, Frame frame)
+    public <DataType> DataType readUpFrameStack(FrameGet<DataType> getter, Frame frame)
             throws FrameSlotTypeException {
 
         Frame lookupFrame = frame;
@@ -29,33 +58,5 @@ public abstract class ClosureSymbolNode extends SymbolNode {
             lookupFrame = getLexicalScope(lookupFrame);
         }
         return getter.get(lookupFrame, this.getSlot());
-    }
-
-    @Specialization(rewriteOn = FrameSlotTypeException.class)
-    protected long readLong(VirtualFrame virtualFrame)
-            throws FrameSlotTypeException {
-        return this.readUpStack(Frame::getLong, virtualFrame);
-    }
-
-    @Specialization(rewriteOn = FrameSlotTypeException.class)
-    protected boolean readBoolean(VirtualFrame virtualFrame)
-            throws FrameSlotTypeException {
-        return this.readUpStack(Frame::getBoolean, virtualFrame);
-    }
-
-    @Specialization(rewriteOn = FrameSlotTypeException.class)
-    protected Object readObject(VirtualFrame virtualFrame)
-            throws FrameSlotTypeException {
-        return this.readUpStack(Frame::getObject, virtualFrame);
-    }
-
-    @Specialization(replaces = { "readLong", "readBoolean", "readObject" })
-    protected Object read(VirtualFrame virtualFrame) {
-        try {
-            return this.readUpStack(Frame::getValue, virtualFrame);
-        } catch (FrameSlotTypeException e) {
-            // FrameSlotTypeException not thrown
-        }
-        return null;
     }
 }

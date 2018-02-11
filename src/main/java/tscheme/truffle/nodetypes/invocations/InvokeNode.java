@@ -16,11 +16,14 @@ import com.oracle.truffle.api.source.SourceSection;
 
 public class InvokeNode extends TSchemeNode {
 
-    @Child protected TSchemeNode functionNode;
+    @Child
+    protected TSchemeNode functionNode;
 
-    @Children protected final TSchemeNode[] argumentNodes;
+    @Children
+    protected final TSchemeNode[] argumentNodes;
 
-    @Child protected DispatchNode dispatchNode;
+    @Child
+    protected DispatchNode dispatchNode;
 
     public InvokeNode(TSchemeNode functionNode,
                       TSchemeNode[] argumentNodes) {

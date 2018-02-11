@@ -19,28 +19,38 @@ import com.oracle.truffle.api.source.Source;
 import com.oracle.truffle.api.source.SourceSection;
 import tscheme.truffle.syntax.*;
 
+/**
+ * ANTLR Visitor, going through source code using patterns in grammar file.
+ * Visitor for each form.
+ */
 public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
 
-    private final Source source;
+    private final Source source; //< Source code.
 
+    /**
+     * Takes source and creates ParseTree.
+     * @param source Source code.
+     * @return ListSyntax
+     * @throws Exception In case of reader error.
+     */
     public static ListSyntax read(Source source) throws Exception {
 
         Reader r = new Reader(source); // create reader
 
-        ParseTree pt = createParseTree(source.getInputStream());
+        ParseTree pt = createParseTree(source.getInputStream()); // create ANTLR syntax tree
 
-        ListSyntax ls = (ListSyntax) r.visit(pt);
+        ListSyntax ls = (ListSyntax) r.visit(pt); // create Scheme Syntax tree
 
         return ls;
     }
 
-
+    // Simple contructor for reader.
     private Reader(Source source) {
         //System.out.println("Source:" + source.getCharacters());
         this.source = source;
     }
 
-
+    // Create parse tree from given stream.
     private static ParseTree createParseTree(InputStream istream)
             throws Exception {
 
@@ -62,6 +72,7 @@ public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
         return pt;
     }
 
+    // Create source section fromm given context and borders.
     private SourceSection createSourceSection(ParserRuleContext ctx) {
         return source.createSection(
                 ctx.start.getLine(),
@@ -69,7 +80,7 @@ public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
                 (ctx.stop.getStopIndex() - ctx.start.getStartIndex() + 1));
     }
 
-
+    // Visit "file", that is, root of program.
     @Override
     public ListSyntax visitFile(TSchemeParser.FileContext ctx) {
 
@@ -84,6 +95,7 @@ public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
                 createSourceSection(ctx));
     }
 
+    // Visit "list".
     @Override
     public ListSyntax visitList(TSchemeParser.ListContext ctx) {
         List<Syntax<?>> forms = new ArrayList<>();
@@ -95,6 +107,7 @@ public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
                 createSourceSection(ctx));
     }
 
+    // Visit number and return syntax.
     @Override
     public Syntax<?> visitNumber(TSchemeParser.NumberContext ctx) {
         try {
@@ -107,6 +120,7 @@ public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
         }
     }
 
+    // Visit double and return syntax.
     @Override
     public Syntax<?> visitDouble(TSchemeParser.DoubleContext ctx) {
 
@@ -115,18 +129,21 @@ public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
 
     }
 
+    // Visit boolean and return syntax.
     @Override
     public BooleanSyntax visitBool(TSchemeParser.BoolContext ctx) {
         return new BooleanSyntax("#t".equals(ctx.getText()) ? true : false,
                 createSourceSection(ctx));
     }
 
+    // Visit symbol and return syntax.
     @Override
     public SymbolSyntax visitSymbol(TSchemeParser.SymbolContext ctx) {
         return new SymbolSyntax(new TSchemeSymbol(ctx.getText()),
                 createSourceSection(ctx));
     }
 
+    // Visit quote and return syntax.
     @Override
     public ListSyntax visitQuote(TSchemeParser.QuoteContext ctx) {
         return new ListSyntax(TSchemeList.list(
@@ -135,6 +152,7 @@ public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
                 createSourceSection(ctx));
     }
 
+    // Visit String and return syntax.
     @Override
     public StringSyntax visitString(TSchemeParser.StringContext ctx) {
 
@@ -185,6 +203,4 @@ public class Reader extends TSchemeBaseVisitor<Syntax<?>> {
 
         return new StringSyntax(b.toString(), createSourceSection(ctx));
     }
-
-
 }

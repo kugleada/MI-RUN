@@ -15,7 +15,6 @@ import tscheme.truffle.datatypes.TSchemeSymbol;
 import org.antlr.v4.runtime.misc.Pair;
 
 import com.oracle.truffle.api.frame.FrameSlot;
-import com.oracle.truffle.api.source.SourceSection;
 
 import tscheme.truffle.helpers.TSchemeException;
 import tscheme.truffle.nodetypes.invocations.InvokeNode;
@@ -31,33 +30,36 @@ import tscheme.truffle.nodetypes.controls.LambdaNodeGen;
 import tscheme.truffle.nodetypes.controls.QuoteNode;
 import tscheme.truffle.nodetypes.controls.QuoteNodeGen;
 
+/**
+ * Convert Scheme syntax tree to AST.
+ */
 public class Converter {
 
-    private Environment context;
+    private Environment env; //< Environment.
 
-    private Analyzer analyzer;
+    private Analyzer analyzer; //< Syntax checker
 
     public Converter() {
     }
 
-    public TSchemeNode[] convertSyntaxToAST(Environment context, ListSyntax sexp, TEnvironment env) {
+    public TSchemeNode[] convertSyntaxToAST(Environment context, ListSyntax synExpressions) {
 
-        this.context = context;
+        this.env = context;
 
         Namespace fileNamespace = new Namespace(Namespace.TOP_NS,
-                this.context.getGlobalNamespace());
+                this.env.getGlobalNamespace());
 
         this.analyzer = new Analyzer(fileNamespace);
 
-        this.analyzer.walk(sexp);
+        this.analyzer.walk(synExpressions);
 
         // mistake here
-        return StreamSupport.stream(sexp.getValue().spliterator(), false)
-                .map(obj -> this.convert(obj, fileNamespace, env))
+        return StreamSupport.stream(synExpressions.getValue().spliterator(), false)
+                .map(obj -> this.convert(obj, fileNamespace))
                 .toArray(size -> new TSchemeNode[size]);
     }
 
-    public TSchemeNode convert(Syntax<?> syntax, Namespace ns, TEnvironment env) {
+    public TSchemeNode convert(Syntax<?> syntax, Namespace ns) {
         if (syntax instanceof LongIntegerSyntax) {
             return convert((LongIntegerSyntax) syntax);
         } else if (syntax instanceof BigIntegerSyntax) {
@@ -69,9 +71,9 @@ public class Converter {
         } else if (syntax instanceof StringSyntax) {
             return convert((StringSyntax) syntax);
         } else if (syntax instanceof SymbolSyntax) {
-            return convert((SymbolSyntax) syntax, ns, env);
+            return convert((SymbolSyntax) syntax, ns);
         } else if (syntax instanceof ListSyntax) {
-            return convert((ListSyntax) syntax, ns, env);
+            return convert((ListSyntax) syntax, ns);
         } else {
             throw new TSchemeException("Unknown datatypes: " + syntax.getClass());
         }
@@ -97,7 +99,7 @@ public class Converter {
         return new LitStringNode(str);
     }
 
-    public SymbolNode convert(SymbolSyntax syntax, Namespace ns, TEnvironment env) {
+    public SymbolNode convert(SymbolSyntax syntax, Namespace ns) {
 
     	SymbolNode node;
 
@@ -112,7 +114,7 @@ public class Converter {
         } else if (pair.a == 0) {
             node = LocalSymbolNodeGen.create(pair.b);
         } else if (pair.a == Namespace.LEVEL_GLOBAL) {
-            node = GlobalSymbolNodeGen.create(pair.b, this.context.getGlobalFrame());
+            node = GlobalSymbolNodeGen.create(pair.b, this.env.getGlobalFrame());
         } else {
             node = ClosureSymbolNodeGen.create(pair.b, pair.a);
         }
@@ -120,7 +122,8 @@ public class Converter {
         return node;
     }
 
-    public TSchemeNode convert(ListSyntax syntax, Namespace ns, TEnvironment env) {
+    public TSchemeNode convert(ListSyntax syntax, Namespace ns) {
+
         TSchemeList<? extends Syntax<? extends Object>> list = syntax.getValue();
         if (list == TSchemeList.EMPTY || list.size() == 0) {
             return new LitListNode(TSchemeList.EMPTY);
@@ -131,37 +134,37 @@ public class Converter {
             TSchemeSymbol sym = ((SymbolSyntax) car).getValue();
             switch (sym.name) {
             case "define":
-                return convertDefine(syntax, ns, env);
+                return convertDefine(syntax, ns);
             case "lambda":
-                return convertLambda(syntax, ns, env);
+                return convertLambda(syntax, ns);
             case "if":
-                return convertIf(syntax, ns, env);
+                return convertIf(syntax, ns);
             case "quote":
-                return convertQuote(syntax, ns, env);
+                return convertQuote(syntax, ns);
             }
         }
-        return convertInvoke(list, ns, env);
+        return convertInvoke(list, ns);
     }
 
     private InvokeNode convertInvoke(TSchemeList<? extends Syntax<? extends Object>> list,
-                                     Namespace ns, TEnvironment env) {
+                                     Namespace ns) {
 
-        TSchemeNode functionNode = convert(list.car(), ns, env);
+        TSchemeNode functionNode = convert(list.car(), ns);
 
         TSchemeNode[] arguments = StreamSupport
                 .stream(list.cdr().spliterator(), false)
-                .map(syn-> convert(syn, ns, env))
+                .map(syn-> convert(syn, ns))
                 .toArray(size -> new TSchemeNode[size]);
 
         return new InvokeNode(functionNode, arguments);
 
     }
 
-    private DefineNode convertDefine(ListSyntax syntax, Namespace ns, TEnvironment env) {
+    private DefineNode convertDefine(ListSyntax syntax, Namespace ns) {
         TSchemeList<? extends Syntax<? extends Object>> list = syntax.getValue();
         SymbolSyntax symSyntax = (SymbolSyntax) list.cdr().car();
         FrameSlot nameSlot = ns.getIdentifier(symSyntax.getValue().name).b;
-        TSchemeNode valueNode = convert(list.cdr().cdr().car(), ns, env);
+        TSchemeNode valueNode = convert(list.cdr().cdr().car(), ns);
         DefineNode node = DefineNodeGen.create(valueNode, nameSlot);
         if (valueNode instanceof LambdaNode) {
             // TODO : not good enough. if there's an error in the lambda,
@@ -173,18 +176,20 @@ public class Converter {
     }
 
     @SuppressWarnings("unchecked")
-    private LambdaNode convertLambda(ListSyntax syntax, Namespace ns,
-                                     TEnvironment env) {
+    private LambdaNode convertLambda(
+            ListSyntax syntax,
+            Namespace ns)
+    {
     	TSchemeList<? extends Syntax<? extends Object>> list = syntax.getValue();
         Namespace lambdaNs = this.analyzer.getNamespace(syntax);
         List<FrameSlot> formalParameters = new ArrayList<>();
         ListSyntax argsSyntax = (ListSyntax) list.cdr().car();
         for (SymbolSyntax arg : (TSchemeList<SymbolSyntax>) argsSyntax.getValue()) {
-            formalParameters.add(convert(arg, lambdaNs, env).getSlot());
+            formalParameters.add(convert(arg, lambdaNs).getSlot());
         }
         List<TSchemeNode> bodyNodes = new ArrayList<>();
         for (Syntax<? extends Object> body : list.cdr().cdr()) {
-            bodyNodes.add(convert(body, lambdaNs, env));
+            bodyNodes.add(convert(body, lambdaNs));
         }
 
         TSchemeFunction function = new TSchemeFunction(
@@ -195,16 +200,15 @@ public class Converter {
         return node;
     }
 
-    private IfNode convertIf(ListSyntax syntax, Namespace ns,
-                             TEnvironment env) {
+    private IfNode convertIf(ListSyntax syntax, Namespace ns) {
     	TSchemeList<? extends Syntax<? extends Object>> list = syntax.getValue();
-        return new IfNode(convert(list.cdr().car(), ns, env),
-                convert(list.cdr().cdr().car(), ns, env),
-                convert(list.cdr().cdr().cdr().car(), ns, env));
+        return new IfNode(convert(list.cdr().car(), ns),
+                convert(list.cdr().cdr().car(), ns),
+                convert(list.cdr().cdr().cdr().car(), ns));
     }
 
     private static QuoteNode convertQuote(ListSyntax syntax,
-                                          Namespace ns, TEnvironment env) {
+                                          Namespace ns) {
         TSchemeList<? extends Syntax<? extends Object>> list = syntax.getValue();
         Syntax<? extends Object> value = list.cdr().car();
         TSchemeNode node;

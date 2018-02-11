@@ -4,34 +4,37 @@ import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.frame.FrameSlotTypeException;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
+/**
+ * Specialized class for local variable storage.
+ */
 public abstract class LocalSymbolNode extends SymbolNode {
 
     @Specialization(rewriteOn = FrameSlotTypeException.class)
-    protected long readLong(VirtualFrame virtualFrame)
+    protected long readLong(VirtualFrame frame)
             throws FrameSlotTypeException{
-        return virtualFrame.getLong(getSlot());
+        return frame.getLong(getSlot());
     }
 
     @Specialization(rewriteOn = FrameSlotTypeException.class)
-    protected boolean readBoolean(VirtualFrame virtualFrame)
+    protected boolean readBoolean(VirtualFrame frame)
             throws FrameSlotTypeException{
-        return virtualFrame.getBoolean(getSlot());
+        return frame.getBoolean(getSlot());
     }
 
     @Specialization(rewriteOn = FrameSlotTypeException.class)
-    protected boolean readDouble(VirtualFrame virtualFrame)
+    protected boolean readDouble(VirtualFrame frame)
             throws FrameSlotTypeException{
-        return virtualFrame.getBoolean(getSlot());
+        return frame.getBoolean(getSlot());
     }
 
     @Specialization(rewriteOn = FrameSlotTypeException.class)
-    protected Object readObject(VirtualFrame virtualFrame)
+    protected Object readObject(VirtualFrame frame)
             throws FrameSlotTypeException{
-        return virtualFrame.getObject(getSlot());
+        return frame.getObject(getSlot());
     }
 
     @Specialization(replaces = { "readLong", "readBoolean", "readDouble", "readObject" })
-    protected Object read(VirtualFrame virtualFrame) {
-        return virtualFrame.getValue(getSlot());
+    protected Object read(VirtualFrame frame) {
+        return frame.getValue(getSlot());
     }
 }

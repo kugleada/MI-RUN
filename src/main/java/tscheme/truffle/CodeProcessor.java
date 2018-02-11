@@ -35,7 +35,7 @@ public class CodeProcessor {
         Converter converter = new Converter();
 
         // Get AST nodes
-        TSchemeNode[] nodes = converter.convertSyntaxToAST(env, synExpressions, null);
+        TSchemeNode[] nodes = converter.convertSyntaxToAST(env, synExpressions);
 
         return nodes;
     }
