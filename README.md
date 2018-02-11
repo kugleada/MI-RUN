@@ -7,13 +7,13 @@
 3. Unzip the GraalVM to ./graalvm (./graalvm should contain folders like bin, jre, lib, ...)
 4. Set JAVA_HOME to <absolute path to MI-RUN>/MI-RUN/graalvm (i.e. export JAVA_HOME=/home/jn/run/gitk/MI-RUN/graalvm) - this points to special JDK, maven will call it during build
 
-## Build program WITHOUT tests:
+### Build program WITHOUT tests:
 
 ```
 $ mvn -Dmaven.test.skip=true install (or package, or clean install)
 ```
 
-## Build program WITH tests:
+### Build program WITH tests:
 
 ```
 $ mvn package (or clean install: mvn clean install)
@@ -21,8 +21,20 @@ $ mvn package (or clean install: mvn clean install)
 
 ## Run program:
 1. Go to root folder of the project (./MI-RUN should be working directory)
-2. Run script ./schemein
+2. Run script ./schemein-[no]graal
 
+### Example runs
+
+REPL:
+```
+$ ./schemein-graal
+```
+
+Input from file:
+```
+$ ./schemein-graal ./schemecodes/scheme_fib10.txt
+$ ./schemein-graal ./schemecodes/scheme_fact100.txt
+```
 
 # Requirements for development, installation on Linux
 
