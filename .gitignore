@@ -12,3 +12,7 @@
 *.exe
 *.o
 *.so
+
+# Maven
+log/
+target/
