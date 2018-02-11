@@ -2,6 +2,7 @@ package tscheme.truffle;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.frame.MaterializedFrame;
@@ -33,6 +34,7 @@ public class TSchemeMain {
         // Prepare global environment - storage for all variables and built-in functions.
         Environment globEnv = new Environment();
 
+        StringBuilder accumulatedCode = new StringBuilder();
         // Start actual REPL.
         while (true) {
 
@@ -46,8 +48,9 @@ public class TSchemeMain {
                 System.out.println("Exiting Scheme interpreter ...");
                 break;
             }
+            accumulatedCode.append(" ").append(sourceCode);
 
-            TSchemeNode[] nodes = CodeProcessor.getASTNodes(sourceCode, globEnv);
+            TSchemeNode[] nodes = CodeProcessor.getASTNodes(accumulatedCode.toString(), globEnv);
 
             // EVALuation.
             Object result = createRootAndExecute(nodes, globEnv.getGlobalFrame());
