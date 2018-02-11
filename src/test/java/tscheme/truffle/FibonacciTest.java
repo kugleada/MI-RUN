@@ -19,10 +19,10 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static tscheme.truffle.TSchemeMain.createRootAndExecute;
 
 @RunWith(Parameterized.class)
 public class FibonacciTest {
-
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -50,28 +50,14 @@ public class FibonacciTest {
     @Test
     public void testBuiltIns() throws Exception {
 
-        Environment context = new Environment();
-
-        TEnvironment environment = new TEnvironmentBuilder().createEnvironment();
-
         String sourceCode = functionInput;
 
-        Source source = Source.newBuilder(sourceCode).name("<stdin>").mimeType(TSchemeLanguage.MIME_TYPE).build();
+        Environment globEnv = new Environment();
 
-        ListSyntax synExpressions = Reader.read(source);
+        TSchemeNode[] nodes = CodeProcessor.getASTNodes(sourceCode, globEnv);
 
-        Converter converter = new Converter();
-
-        TSchemeNode[] nodes = converter.convertSexp(context, synExpressions, environment);
-
-        TSchemeRootNode root = new TSchemeRootNode(nodes, context.getGlobalFrame().getFrameDescriptor());
-
-        CallTarget ct = Truffle.getRuntime().createCallTarget(root);
-
-        Object ret =  ct.call(context.getGlobalFrame());
+        Object ret = createRootAndExecute(nodes, globEnv.getGlobalFrame());
 
         assertEquals(expectedOutput,ret.toString());
     }
-
-
 }

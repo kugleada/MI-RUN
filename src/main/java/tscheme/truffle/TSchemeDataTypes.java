@@ -46,7 +46,7 @@ public class TSchemeDataTypes { // datatypes definition for our language
     }
     */
 
-    /* Sometimes causes problems with converting large enough BigInteger by double, causing it to reach Infinity.
+    /* Sometimes causes problems with converting large enough BigInteger into double, causing it to reach Infinity.
     @ImplicitCast // implicit cast from BigInteger to double, possible loss of precision
     public static double castBigIntegerToDouble(BigInteger value) {
         return (value.doubleValue());

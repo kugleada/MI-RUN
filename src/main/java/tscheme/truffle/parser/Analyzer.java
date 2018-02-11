@@ -8,26 +8,22 @@ import tscheme.truffle.syntax.SymbolSyntax;
 import tscheme.truffle.datatypes.TSchemeList;
 import tscheme.truffle.datatypes.TSchemeSymbol;
 
-import com.oracle.truffle.api.frame.FrameDescriptor;
-
 /**
  * Class serves for syntax check, i.e. does define have two arguments?
  * This class walks through the syntax objects to define all the namespaces
  * and the identifiers within. Special forms are also verified to be structured
  * correctly.
  */
-public class Analyzer extends SexpListener {
+public class Analyzer extends SyntaxExpressionListener {
+
     private final Map<ListSyntax, Namespace> namespaces;
+
     private Namespace currentNamespace;
 
     public Analyzer(Namespace topNamespace) {
         this.namespaces = new HashMap<>();
         this.namespaces.put(null, topNamespace);
         this.currentNamespace = topNamespace;
-    }
-
-    public Map<ListSyntax, Namespace> getNamespaceMap() {
-        return this.namespaces;
     }
 
     public Namespace getNamespace(ListSyntax syntax) {

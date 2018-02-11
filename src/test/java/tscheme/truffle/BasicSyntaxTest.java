@@ -1,28 +1,19 @@
 package tscheme.truffle;
 
-
-import com.oracle.truffle.api.CallTarget;
-import com.oracle.truffle.api.Truffle;
-import com.oracle.truffle.api.source.Source;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import tscheme.truffle.helpers.TEnvironment;
-import tscheme.truffle.helpers.TEnvironmentBuilder;
+
 import tscheme.truffle.nodetypes.TSchemeNode;
-import tscheme.truffle.nodetypes.TSchemeRootNode;
-import tscheme.truffle.parser.Converter;
-import tscheme.truffle.parser.Reader;
-import tscheme.truffle.syntax.ListSyntax;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static tscheme.truffle.TSchemeMain.createRootAndExecute;
 
 @RunWith(Parameterized.class)
 public class BasicSyntaxTest {
-
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -47,28 +38,14 @@ public class BasicSyntaxTest {
     @Test
     public void testBuiltIns() throws Exception {
 
-        Environment context = new Environment();
-
-        TEnvironment environment = new TEnvironmentBuilder().createEnvironment();
-
         String sourceCode = functionInput;
 
-        Source source = Source.newBuilder(sourceCode).name("<stdin>").mimeType(TSchemeLanguage.MIME_TYPE).build();
+        Environment globEnv = new Environment();
 
-        ListSyntax synExpressions = Reader.read(source);
+        TSchemeNode[] nodes = CodeProcessor.getASTNodes(sourceCode, globEnv);
 
-        Converter converter = new Converter();
-
-        TSchemeNode[] nodes = converter.convertSexp(context, synExpressions, environment);
-
-        TSchemeRootNode root = new TSchemeRootNode(nodes, context.getGlobalFrame().getFrameDescriptor());
-
-        CallTarget ct = Truffle.getRuntime().createCallTarget(root);
-
-        Object ret =  ct.call(context.getGlobalFrame());
+        Object ret = createRootAndExecute(nodes, globEnv.getGlobalFrame());
 
         assertEquals(expectedOutput,ret.toString());
     }
-
-
 }

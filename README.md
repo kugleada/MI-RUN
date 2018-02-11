@@ -53,3 +53,9 @@ Download: https://www.jetbrains.com/idea/download/#section=linux
 
 In IntelliJ, simply import project. It should detect pom.xml, project structure etc. Do not let IDE change the general structure! Do not build the program using IDE!
 Build it using mvn package and run it using ./schemein, as written above.
+
+# Tutorials and references:
+* https://github.com/graalvm/simplelanguage
+* http://stefan-marr.de/2015/11/add-graal-jit-compilation-to-your-jvm-language-in-5-easy-steps-step-1/
+* http://cesquivias.github.io
+* http://www.graalvm.org/truffle/javadoc/overview-summary.html

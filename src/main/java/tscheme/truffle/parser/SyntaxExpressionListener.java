@@ -10,7 +10,7 @@ import tscheme.truffle.datatypes.TSchemeList;
  * Convenience methods for controls forms are included.
  *
  */
-public abstract class SexpListener {
+public abstract class SyntaxExpressionListener {
     private static enum ListType {
         LIST,
         DEFINE,

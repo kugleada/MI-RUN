@@ -15,16 +15,22 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.ExplodeLoop;
 import com.oracle.truffle.api.nodes.RootNode;
 
+/**
+ * Root node of whole execution unit.
+ */
 public class TSchemeRootNode extends RootNode {
 
     @Children
-    private final TSchemeNode[] bodyNodes;
+    private final TSchemeNode[] bodyNodes; //< body nodes
 
     @CompilationFinal
-    public String name;
+    public String name; // name of this Root node
 
-    public MaterializedFrame lastFrame = null;
-
+    /**
+     * Constructor for root node.
+     * @param bodyNodes Body nodes.
+     * @param frameDescriptor Which frame descriptor should be used.
+     */
     public TSchemeRootNode(TSchemeNode[] bodyNodes,
                            FrameDescriptor frameDescriptor) {
         super(null, frameDescriptor);
@@ -36,12 +42,18 @@ public class TSchemeRootNode extends RootNode {
         return Arrays.toString(this.bodyNodes);
     }
 
+    // Set name for this root node.
     public void setName(String name) {
         if (this.name == null) {
             this.name = name;
         }
     }
 
+    /**
+     * Execution of root node.
+     * @param virtualFrame Scope.
+     * @return Result of execution of last node (child).
+     */
     @Override
     @ExplodeLoop
     public Object execute(VirtualFrame virtualFrame) {
@@ -50,18 +62,21 @@ public class TSchemeRootNode extends RootNode {
 
         System.out.println("Current frame: " + Truffle.getRuntime().getCurrentFrame());
 */
-        int last = this.bodyNodes.length - 1;
+        // which node is the last
+        int lastNode = this.bodyNodes.length - 1;
 
-        CompilerAsserts.compilationConstant(last);
+        //CompilerAsserts.compilationConstant(last);
 
         //System.out.println("Caller frame: " + Truffle.getRuntime().getCallerFrame());
 
-        for (int i=0; i<last; i++) {
+        // execute body except for last one
+        for (int i=0; i < lastNode; ++i) {
             //System.out.println(".");
             this.bodyNodes[i].executeGeneric(virtualFrame);
         }
 
-        return this.bodyNodes[last].executeGeneric(virtualFrame);
+        // execute last one and return its return value
+        return this.bodyNodes[lastNode].executeGeneric(virtualFrame);
     }
 
     public static TSchemeRootNode create(FrameSlot[] argumentNames,

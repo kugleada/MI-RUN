@@ -39,9 +39,7 @@ public class TSchemeMain {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         // Prepare global environment - storage for all variables and built-in functions.
-        Environment context = new Environment();
-
-        TEnvironment environment = new TEnvironmentBuilder().createEnvironment();
+        Environment globEnv = new Environment();
 
         // Start actual REPL.
         while (true) {
@@ -57,23 +55,12 @@ public class TSchemeMain {
                 break;
             }
 
-            // Create representation of source code.
-            Source source = Source.newBuilder(sourceCode).name("<stdin>").mimeType(TSchemeLanguage.MIME_TYPE).build();
+            TSchemeNode[] nodes = CodeProcessor.getASTNodes(sourceCode, globEnv);
 
-            // Read input - contains lexing, parsing, etc.
-            ListSyntax synExpressions = Reader.read(source);
-            //System.out.println(synExpressions);
+            // EVALuation.
+            Object result = createRootAndExecute(nodes, globEnv.getGlobalFrame());
 
-            Converter converter = new Converter();
-
-            TSchemeNode[] nodes = converter.convertSexp(context, synExpressions, environment);
-
-            //System.out.println("Nodes size:" + nodes.length);
-            //System.out.println(nodes[0].toString());
-            //System.out.println(nodes[0].getClass());
-            // EVAL
-            Object result = execute(nodes, context.getGlobalFrame());
-            // PRINT
+            // PRINT results.
             if (result != TSchemeList.EMPTY) {
                 System.out.println("Result: " + result);
             }
@@ -81,51 +68,27 @@ public class TSchemeMain {
     }
 
     private static void runTSchemeFromFile(String filename) throws Exception {
-        String sourceCode = "";
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        try {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
 
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-            sourceCode = sb.toString();
-        } finally {
-            br.close();
-        }
+        Environment globEnv = new Environment();
 
-        Source source = Source.newBuilder(sourceCode).name("<file>").mimeType(TSchemeLanguage.MIME_TYPE).build();
+        String sourceCode = CodeProcessor.getSourceCodeFromFile(filename);
 
-        Environment context = new Environment();
-        TEnvironment env = new TEnvironmentBuilder().createEnvironment();
+        TSchemeNode[] nodes = CodeProcessor.getASTNodes(sourceCode, globEnv);
 
-        ListSyntax sexp = Reader.read(source);
-        System.out.println(sexp);
-        Converter converter = new Converter(); // true - tail optimization enabled
-
-        TSchemeNode[] nodes = converter.convertSexp(context, sexp, env);
-
-        Object result = execute(nodes, context.getGlobalFrame());
+        Object result = createRootAndExecute(nodes, globEnv.getGlobalFrame());
 
         if (result != TSchemeList.EMPTY) {
             System.out.println(result);
         }
     }
 
-    private static Object execute(TSchemeNode[] nodes, MaterializedFrame globalFrame) {
+    public static Object createRootAndExecute(TSchemeNode[] nodes, MaterializedFrame globalFrame) {
         TSchemeRootNode root = new TSchemeRootNode(nodes, globalFrame.getFrameDescriptor());
 
         CallTarget ct = Truffle.getRuntime().createCallTarget(root);
 
         Object ret =  ct.call(globalFrame);
 
-        //System.out.println(ret.getClass());
-        //System.out.println(ret);
-
         return ret;
-
     }
 }

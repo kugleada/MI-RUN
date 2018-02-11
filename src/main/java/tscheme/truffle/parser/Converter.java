@@ -40,7 +40,7 @@ public class Converter {
     public Converter() {
     }
 
-    public TSchemeNode[] convertSexp(Environment context, ListSyntax sexp, TEnvironment env) {
+    public TSchemeNode[] convertSyntaxToAST(Environment context, ListSyntax sexp, TEnvironment env) {
 
         this.context = context;
 

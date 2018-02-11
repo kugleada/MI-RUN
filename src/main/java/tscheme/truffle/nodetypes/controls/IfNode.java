@@ -36,7 +36,6 @@ public class IfNode extends TSchemeNode {
      * @param testNode Condition body.
      * @param thenNode Then body.
      * @param elseNode Else body.
-     * @param sourceSection Which part of source code represents this if.
      */
     public IfNode(TSchemeNode testNode, TSchemeNode thenNode,
                   TSchemeNode elseNode) {
