@@ -27,15 +27,12 @@ tscheme/truffle/nodetypes/builtins/basicop/DivBuiltInNodeFactory$DivBuiltInNodeG
 META-INF/truffle/language
 tscheme/truffle/nodetypes/builtins/basicop/MulBuiltInNodeFactory.class
 tscheme/truffle/nodetypes/controls/QuoteNode$QuoteKind.class
-tscheme/truffle/nodetypes/invocations/DispatchNode.class
 tscheme/truffle/nodetypes/builtins/basicop/MulBuiltInNodeFactory$1.class
 tscheme/truffle/nodetypes/controls/QuoteNode.class
 tscheme/truffle/nodetypes/builtins/relationop/GreaterThanBuiltInNodeFactory$GreaterThanBuiltInNodeGen.class
 cz/schemeinterpreter/scheme_env/BuiltInFunction.class
-tscheme/truffle/nodetypes/invocations/DirectDispatchNode.class
 tscheme/truffle/nodetypes/literals/LitDoubleNode.class
 tscheme/truffle/nodetypes/builtins/basicop/ModBuiltInNode.class
-tscheme/truffle/nodetypes/invocations/UninitializedDispatchNode.class
 tscheme/truffle/nodetypes/builtins/basicop/AddBuiltInNodeFactory.class
 tscheme/truffle/datatypes/TSchemeList.class
 cz/schemeinterpreter/datatypes/SchemeSymbol.class
@@ -69,7 +66,6 @@ cz/schemeinterpreter/scheme_env/BuiltInFunction$8.class
 tscheme/truffle/helpers/TSchemeException.class
 tscheme/truffle/nodetypes/TSchemeRootNode.class
 tscheme/truffle/nodetypes/builtins/basicop/SubBuiltInNodeFactory$SubBuiltInNodeGen.class
-tscheme/truffle/nodetypes/invocations/GenericDispatchNode.class
 tscheme/truffle/parser/syntax/DoubleSyntax.class
 tscheme/truffle/nodetypes/builtins/relationop/LessThanBuiltInNodeFactory.class
 cz/schemeinterpreter/truffleNodes/TDefineNodeGen.class

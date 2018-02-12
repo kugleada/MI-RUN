@@ -12,6 +12,9 @@ import tscheme.truffle.nodetypes.TSchemeNode;
 
 import java.util.Arrays;
 
+/**
+ * Invocation node which uses IndirectCallNode and tail call optimization.
+ */
 public class TCInvokeNode extends InvokeNode {
     @Child protected TSchemeNode functionNode;
     @Children protected final TSchemeNode[] argumentNodes;
@@ -36,9 +39,11 @@ public class TCInvokeNode extends InvokeNode {
             argumentValues[i+1] = this.argumentNodes[i].executeGeneric(virtualFrame);
         }
         if (this.isTail()) {
+            //use exception for tail call
             throw new TailCallException(function.callTarget, argumentValues);
         } else {
-            return this.call(virtualFrame, function.callTarget, argumentValues);
+            //regular call
+            return this.call(function.callTarget, argumentValues);
         }
     }
 
@@ -51,11 +56,13 @@ public class TCInvokeNode extends InvokeNode {
         }
     }
 
-    public Object call(VirtualFrame virtualFrame, CallTarget callTarget, Object[] arguments) {
+    public Object call(CallTarget callTarget, Object[] arguments) {
+        //endless loop is here because there could be more tail call exceptions thrown.
         while (true) {
             try {
                 return callNode.call(callTarget, arguments);
             } catch (TailCallException e) {
+                //take new target and arguments from exception
                 callTarget = e.callTarget;
                 arguments = e.arguments;
             }
