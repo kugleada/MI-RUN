@@ -5,6 +5,8 @@ import com.oracle.truffle.api.CompilerDirectives;
 import com.oracle.truffle.api.dsl.GeneratedBy;
 import com.oracle.truffle.api.nodes.UnexpectedResultException;
 import java.math.BigInteger;
+
+import tscheme.truffle.datatypes.TSchemeDataTypes;
 import tscheme.truffle.datatypes.TSchemeFunction;
 import tscheme.truffle.datatypes.TSchemeList;
 import tscheme.truffle.datatypes.TSchemeSymbol;
@@ -145,44 +147,51 @@ public final class TSchemeDataTypesGen extends TSchemeDataTypes {
         throw new UnexpectedResultException(value);
     }
 
-    public static double expectImplicitDouble(int state, Object value) throws UnexpectedResultException {
+    public static String expectImplicitString(int state, Object value) throws UnexpectedResultException {
         if ((state & 0b1) != 0 && value instanceof Long) {
-            return castLongToDouble((long) value);
+            return castLongToString((long) value);
         } else if ((state & 0b10) != 0 && value instanceof Double) {
-            return (double) value;
-        } else if ((state & 0b100) != 0 && value instanceof BigInteger) {
-            return castBigIntegerToDouble((BigInteger) value);
+            return castDoubleToString((double) value);
+        } else if ((state & 0b100) != 0 && value instanceof String) {
+            return (String) value;
+        } else if ((state & 0b1000) != 0 && value instanceof BigInteger) {
+            return castBigIntegerToString((BigInteger) value);
         } else {
             throw new UnexpectedResultException(value);
         }
     }
 
-    public static boolean isImplicitDouble(int state, Object value) {
+    public static boolean isImplicitString(int state, Object value) {
         return ((state & 0b1) != 0 && value instanceof Long)
              || ((state & 0b10) != 0 && value instanceof Double)
-             || ((state & 0b100) != 0 && value instanceof BigInteger);
+             || ((state & 0b100) != 0 && value instanceof String)
+             || ((state & 0b1000) != 0 && value instanceof BigInteger);
     }
 
-    public static double asImplicitDouble(int state, Object value) {
+    public static String asImplicitString(int state, Object value) {
         if ((state & 0b1) != 0 && value instanceof Long) {
-            return castLongToDouble((long) value);
+            return castLongToString((long) value);
         } else if ((state & 0b10) != 0 && value instanceof Double) {
-            return (double) value;
-        } else if ((state & 0b100) != 0 && value instanceof BigInteger) {
-            return castBigIntegerToDouble((BigInteger) value);
+            return castDoubleToString((double) value);
+        } else if ((state & 0b100) != 0 && value instanceof String) {
+            return (String) value;
+        } else if ((state & 0b1000) != 0 && value instanceof BigInteger) {
+            return castBigIntegerToString((BigInteger) value);
         } else {
             CompilerDirectives.transferToInterpreterAndInvalidate();
             throw new IllegalArgumentException("Illegal type ");
         }
     }
 
-    public static int specializeImplicitDouble(Object value) {
+    public static int specializeImplicitString(Object value) {
         if (value instanceof Long) {
             return 0b1;
         } else if (value instanceof Double) {
             return 0b10;
-        } else if (value instanceof BigInteger) {
+        } else if (value instanceof String) {
             return 0b100;
+        } else if (value instanceof BigInteger) {
+            return 0b1000;
         } else {
             return 0;
         }
@@ -190,7 +199,7 @@ public final class TSchemeDataTypesGen extends TSchemeDataTypes {
 
     public static BigInteger expectImplicitBigInteger(int state, Object value) throws UnexpectedResultException {
         if ((state & 0b1) != 0 && value instanceof Long) {
-            return castBigInteger((long) value);
+            return castLongToBigInteger((long) value);
         } else if ((state & 0b10) != 0 && value instanceof BigInteger) {
             return (BigInteger) value;
         } else {
@@ -205,7 +214,7 @@ public final class TSchemeDataTypesGen extends TSchemeDataTypes {
 
     public static BigInteger asImplicitBigInteger(int state, Object value) {
         if ((state & 0b1) != 0 && value instanceof Long) {
-            return castBigInteger((long) value);
+            return castLongToBigInteger((long) value);
         } else if ((state & 0b10) != 0 && value instanceof BigInteger) {
             return (BigInteger) value;
         } else {

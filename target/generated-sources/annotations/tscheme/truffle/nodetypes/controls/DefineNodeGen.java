@@ -10,8 +10,7 @@ import com.oracle.truffle.api.nodes.Node;
 import com.oracle.truffle.api.nodes.NodeCost;
 import com.oracle.truffle.api.nodes.UnexpectedResultException;
 import java.util.concurrent.locks.Lock;
-import tscheme.truffle.TSchemeDataTypes;
-import tscheme.truffle.TSchemeDataTypesGen;
+import tscheme.truffle.datatypes.TSchemeDataTypesGen;
 import tscheme.truffle.nodetypes.TSchemeNode;
 
 @GeneratedBy(DefineNode.class)
@@ -59,6 +58,7 @@ public final class DefineNodeGen extends DefineNode {
             return executeAndSpecialize(frameValue, ex.getResult());
         }
         assert (state & 0b10) != 0 /* is-active writeLong(VirtualFrame, long) */;
+        assert (isSlotLongKind());
         return writeLong(frameValue, valueNodeValue_);
     }
 
@@ -70,26 +70,19 @@ public final class DefineNodeGen extends DefineNode {
             return executeAndSpecialize(frameValue, ex.getResult());
         }
         assert (state & 0b100) != 0 /* is-active writeBoolean(VirtualFrame, boolean) */;
+        assert (isSlotBooleanKind());
         return writeBoolean(frameValue, valueNodeValue_);
     }
 
     private Object executeGeneric_double2(VirtualFrame frameValue, int state) {
-        long valueNodeValue_long = 0L;
         double valueNodeValue_;
         try {
-            if ((state & 0b11000001) == 0 /* only-active 0:double */) {
-                valueNodeValue_long = valueNode_.executeLong(frameValue);
-                valueNodeValue_ = TSchemeDataTypes.castLongToDouble(valueNodeValue_long);
-            } else if ((state & 0b10100001) == 0 /* only-active 0:double */) {
-                valueNodeValue_ = valueNode_.executeDouble(frameValue);
-            } else {
-                Object valueNodeValue__ = valueNode_.executeGeneric(frameValue);
-                valueNodeValue_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0b11100000) >>> 5 /* extract-implicit-active 0:double */, valueNodeValue__);
-            }
+            valueNodeValue_ = valueNode_.executeDouble(frameValue);
         } catch (UnexpectedResultException ex) {
             return executeAndSpecialize(frameValue, ex.getResult());
         }
         assert (state & 0b1000) != 0 /* is-active writeDouble(VirtualFrame, double) */;
+        assert (isSlotDoubleKind());
         return writeDouble(frameValue, valueNodeValue_);
     }
 
@@ -97,14 +90,17 @@ public final class DefineNodeGen extends DefineNode {
         Object valueNodeValue_ = valueNode_.executeGeneric(frameValue);
         if ((state & 0b10) != 0 /* is-active writeLong(VirtualFrame, long) */ && valueNodeValue_ instanceof Long) {
             long valueNodeValue__ = (long) valueNodeValue_;
+            assert (isSlotLongKind());
             return writeLong(frameValue, valueNodeValue__);
         }
         if ((state & 0b100) != 0 /* is-active writeBoolean(VirtualFrame, boolean) */ && valueNodeValue_ instanceof Boolean) {
             boolean valueNodeValue__ = (boolean) valueNodeValue_;
+            assert (isSlotBooleanKind());
             return writeBoolean(frameValue, valueNodeValue__);
         }
-        if ((state & 0b1000) != 0 /* is-active writeDouble(VirtualFrame, double) */ && TSchemeDataTypesGen.isImplicitDouble((state & 0b11100000) >>> 5 /* extract-implicit-active 0:double */, valueNodeValue_)) {
-            double valueNodeValue__ = TSchemeDataTypesGen.asImplicitDouble((state & 0b11100000) >>> 5 /* extract-implicit-active 0:double */, valueNodeValue_);
+        if ((state & 0b1000) != 0 /* is-active writeDouble(VirtualFrame, double) */ && valueNodeValue_ instanceof Double) {
+            double valueNodeValue__ = (double) valueNodeValue_;
+            assert (isSlotDoubleKind());
             return writeDouble(frameValue, valueNodeValue__);
         }
         if ((state & 0b10000) != 0 /* is-active write(VirtualFrame, Object) */) {
@@ -127,6 +123,7 @@ public final class DefineNodeGen extends DefineNode {
             return TSchemeDataTypesGen.expectBoolean(executeAndSpecialize(frameValue, ex.getResult()));
         }
         if ((state & 0b100) != 0 /* is-active writeBoolean(VirtualFrame, boolean) */) {
+            assert (isSlotBooleanKind());
             return writeBoolean(frameValue, valueNodeValue_);
         }
         CompilerDirectives.transferToInterpreterAndInvalidate();
@@ -139,26 +136,18 @@ public final class DefineNodeGen extends DefineNode {
         if ((state & 0b10000) != 0 /* is-active write(VirtualFrame, Object) */) {
             return TSchemeDataTypesGen.expectDouble(executeGeneric(frameValue));
         }
-        long valueNodeValue_long = 0L;
         double valueNodeValue_;
         try {
-            if ((state & 0b11000001) == 0 /* only-active 0:double */) {
-                valueNodeValue_long = valueNode_.executeLong(frameValue);
-                valueNodeValue_ = TSchemeDataTypes.castLongToDouble(valueNodeValue_long);
-            } else if ((state & 0b10100001) == 0 /* only-active 0:double */) {
-                valueNodeValue_ = valueNode_.executeDouble(frameValue);
-            } else {
-                Object valueNodeValue__ = valueNode_.executeGeneric(frameValue);
-                valueNodeValue_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0b11100000) >>> 5 /* extract-implicit-active 0:double */, valueNodeValue__);
-            }
+            valueNodeValue_ = valueNode_.executeDouble(frameValue);
         } catch (UnexpectedResultException ex) {
             return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(frameValue, ex.getResult()));
         }
         if ((state & 0b1000) != 0 /* is-active writeDouble(VirtualFrame, double) */) {
+            assert (isSlotDoubleKind());
             return writeDouble(frameValue, valueNodeValue_);
         }
         CompilerDirectives.transferToInterpreterAndInvalidate();
-        return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(frameValue, ((state & 0b11000001) == 0 /* only-active 0:double */ ? (Object) valueNodeValue_long : (Object) valueNodeValue_)));
+        return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(frameValue, valueNodeValue_));
     }
 
     @Override
@@ -174,6 +163,7 @@ public final class DefineNodeGen extends DefineNode {
             return TSchemeDataTypesGen.expectLong(executeAndSpecialize(frameValue, ex.getResult()));
         }
         if ((state & 0b10) != 0 /* is-active writeLong(VirtualFrame, long) */) {
+            assert (isSlotLongKind());
             return writeLong(frameValue, valueNodeValue_);
         }
         CompilerDirectives.transferToInterpreterAndInvalidate();
@@ -189,23 +179,25 @@ public final class DefineNodeGen extends DefineNode {
             int exclude = exclude_;
             if ((exclude & 0b1) == 0 /* is-not-excluded writeLong(VirtualFrame, long) */ && valueNodeValue instanceof Long) {
                 long valueNodeValue_ = (long) valueNodeValue;
-                this.state_ = state | 0b10 /* add-active writeLong(VirtualFrame, long) */;
-                lock.unlock();
-                hasLock = false;
-                return writeLong(frameValue, valueNodeValue_);
+                if ((isSlotLongKind())) {
+                    this.state_ = state | 0b10 /* add-active writeLong(VirtualFrame, long) */;
+                    lock.unlock();
+                    hasLock = false;
+                    return writeLong(frameValue, valueNodeValue_);
+                }
             }
             if ((exclude & 0b10) == 0 /* is-not-excluded writeBoolean(VirtualFrame, boolean) */ && valueNodeValue instanceof Boolean) {
                 boolean valueNodeValue_ = (boolean) valueNodeValue;
-                this.state_ = state | 0b100 /* add-active writeBoolean(VirtualFrame, boolean) */;
-                lock.unlock();
-                hasLock = false;
-                return writeBoolean(frameValue, valueNodeValue_);
+                if ((isSlotBooleanKind())) {
+                    this.state_ = state | 0b100 /* add-active writeBoolean(VirtualFrame, boolean) */;
+                    lock.unlock();
+                    hasLock = false;
+                    return writeBoolean(frameValue, valueNodeValue_);
+                }
             }
-            if ((exclude & 0b100) == 0 /* is-not-excluded writeDouble(VirtualFrame, double) */) {
-                int doubleCast0;
-                if ((doubleCast0 = TSchemeDataTypesGen.specializeImplicitDouble(valueNodeValue)) != 0) {
-                    double valueNodeValue_ = TSchemeDataTypesGen.asImplicitDouble(doubleCast0, valueNodeValue);
-                    state = (state | (doubleCast0 << 5) /* set-implicit-active 0:double */);
+            if ((exclude & 0b100) == 0 /* is-not-excluded writeDouble(VirtualFrame, double) */ && valueNodeValue instanceof Double) {
+                double valueNodeValue_ = (double) valueNodeValue;
+                if ((isSlotDoubleKind())) {
                     this.state_ = state | 0b1000 /* add-active writeDouble(VirtualFrame, double) */;
                     lock.unlock();
                     hasLock = false;

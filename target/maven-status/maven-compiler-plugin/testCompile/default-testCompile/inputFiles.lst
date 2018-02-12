@@ -1,1 +1,5 @@
-/home/jn/run/gitk/MI-RUN/src/test/java/tscheme/truffle/TSchemeMainTest.java
+/home/adam/IdeaProjects/MI-RUN/src/test/java/tscheme/truffle/BuiltInTest.java
+/home/adam/IdeaProjects/MI-RUN/src/test/java/tscheme/truffle/TSchemeMainTest.java
+/home/adam/IdeaProjects/MI-RUN/src/test/java/tscheme/truffle/FibonacciTest.java
+/home/adam/IdeaProjects/MI-RUN/src/test/java/tscheme/truffle/FactorialTest.java
+/home/adam/IdeaProjects/MI-RUN/src/test/java/tscheme/truffle/BasicSyntaxTest.java

@@ -8,8 +8,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.NodeCost;
 import com.oracle.truffle.api.nodes.UnexpectedResultException;
 import java.util.concurrent.locks.Lock;
-import tscheme.truffle.TSchemeDataTypes;
-import tscheme.truffle.TSchemeDataTypesGen;
+import tscheme.truffle.datatypes.TSchemeDataTypesGen;
 import tscheme.truffle.nodetypes.TSchemeNode;
 
 @GeneratedBy(QuoteNode.class)
@@ -23,6 +22,11 @@ public final class QuoteNodeGen extends QuoteNode {
     private QuoteNodeGen(TSchemeNode literal, QuoteKind kind) {
         this.kind = kind;
         this.literal_ = literal;
+    }
+
+    @Override
+    protected QuoteKind getKind() {
+        return this.kind;
     }
 
     @Override
@@ -47,6 +51,7 @@ public final class QuoteNodeGen extends QuoteNode {
             return executeAndSpecialize(frameValue, ex.getResult());
         }
         assert (state & 0b10) != 0 /* is-active quoteLong(VirtualFrame, long) */;
+        assert (isLongKind());
         return quoteLong(frameValue, literalValue_);
     }
 
@@ -58,26 +63,19 @@ public final class QuoteNodeGen extends QuoteNode {
             return executeAndSpecialize(frameValue, ex.getResult());
         }
         assert (state & 0b100) != 0 /* is-active quoteBoolean(VirtualFrame, boolean) */;
+        assert (isBooleanKind());
         return quoteBoolean(frameValue, literalValue_);
     }
 
     private Object executeGeneric_double2(VirtualFrame frameValue, int state) {
-        long literalValue_long = 0L;
         double literalValue_;
         try {
-            if ((state & 0b11000001) == 0 /* only-active 0:double */) {
-                literalValue_long = literal_.executeLong(frameValue);
-                literalValue_ = TSchemeDataTypes.castLongToDouble(literalValue_long);
-            } else if ((state & 0b10100001) == 0 /* only-active 0:double */) {
-                literalValue_ = literal_.executeDouble(frameValue);
-            } else {
-                Object literalValue__ = literal_.executeGeneric(frameValue);
-                literalValue_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0b11100000) >>> 5 /* extract-implicit-active 0:double */, literalValue__);
-            }
+            literalValue_ = literal_.executeDouble(frameValue);
         } catch (UnexpectedResultException ex) {
             return executeAndSpecialize(frameValue, ex.getResult());
         }
         assert (state & 0b1000) != 0 /* is-active quoteDouble(VirtualFrame, double) */;
+        assert (isDoubleKind());
         return quoteDouble(frameValue, literalValue_);
     }
 
@@ -85,14 +83,17 @@ public final class QuoteNodeGen extends QuoteNode {
         Object literalValue_ = literal_.executeGeneric(frameValue);
         if ((state & 0b10) != 0 /* is-active quoteLong(VirtualFrame, long) */ && literalValue_ instanceof Long) {
             long literalValue__ = (long) literalValue_;
+            assert (isLongKind());
             return quoteLong(frameValue, literalValue__);
         }
         if ((state & 0b100) != 0 /* is-active quoteBoolean(VirtualFrame, boolean) */ && literalValue_ instanceof Boolean) {
             boolean literalValue__ = (boolean) literalValue_;
+            assert (isBooleanKind());
             return quoteBoolean(frameValue, literalValue__);
         }
-        if ((state & 0b1000) != 0 /* is-active quoteDouble(VirtualFrame, double) */ && TSchemeDataTypesGen.isImplicitDouble((state & 0b11100000) >>> 5 /* extract-implicit-active 0:double */, literalValue_)) {
-            double literalValue__ = TSchemeDataTypesGen.asImplicitDouble((state & 0b11100000) >>> 5 /* extract-implicit-active 0:double */, literalValue_);
+        if ((state & 0b1000) != 0 /* is-active quoteDouble(VirtualFrame, double) */ && literalValue_ instanceof Double) {
+            double literalValue__ = (double) literalValue_;
+            assert (isDoubleKind());
             return quoteDouble(frameValue, literalValue__);
         }
         if ((state & 0b10000) != 0 /* is-active quote(VirtualFrame, Object) */) {
@@ -115,6 +116,7 @@ public final class QuoteNodeGen extends QuoteNode {
             return TSchemeDataTypesGen.expectBoolean(executeAndSpecialize(frameValue, ex.getResult()));
         }
         if ((state & 0b100) != 0 /* is-active quoteBoolean(VirtualFrame, boolean) */) {
+            assert (isBooleanKind());
             return quoteBoolean(frameValue, literalValue_);
         }
         CompilerDirectives.transferToInterpreterAndInvalidate();
@@ -127,26 +129,18 @@ public final class QuoteNodeGen extends QuoteNode {
         if ((state & 0b10000) != 0 /* is-active quote(VirtualFrame, Object) */) {
             return TSchemeDataTypesGen.expectDouble(executeGeneric(frameValue));
         }
-        long literalValue_long = 0L;
         double literalValue_;
         try {
-            if ((state & 0b11000001) == 0 /* only-active 0:double */) {
-                literalValue_long = literal_.executeLong(frameValue);
-                literalValue_ = TSchemeDataTypes.castLongToDouble(literalValue_long);
-            } else if ((state & 0b10100001) == 0 /* only-active 0:double */) {
-                literalValue_ = literal_.executeDouble(frameValue);
-            } else {
-                Object literalValue__ = literal_.executeGeneric(frameValue);
-                literalValue_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0b11100000) >>> 5 /* extract-implicit-active 0:double */, literalValue__);
-            }
+            literalValue_ = literal_.executeDouble(frameValue);
         } catch (UnexpectedResultException ex) {
             return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(frameValue, ex.getResult()));
         }
         if ((state & 0b1000) != 0 /* is-active quoteDouble(VirtualFrame, double) */) {
+            assert (isDoubleKind());
             return quoteDouble(frameValue, literalValue_);
         }
         CompilerDirectives.transferToInterpreterAndInvalidate();
-        return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(frameValue, ((state & 0b11000001) == 0 /* only-active 0:double */ ? (Object) literalValue_long : (Object) literalValue_)));
+        return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(frameValue, literalValue_));
     }
 
     @Override
@@ -162,6 +156,7 @@ public final class QuoteNodeGen extends QuoteNode {
             return TSchemeDataTypesGen.expectLong(executeAndSpecialize(frameValue, ex.getResult()));
         }
         if ((state & 0b10) != 0 /* is-active quoteLong(VirtualFrame, long) */) {
+            assert (isLongKind());
             return quoteLong(frameValue, literalValue_);
         }
         CompilerDirectives.transferToInterpreterAndInvalidate();
@@ -177,23 +172,25 @@ public final class QuoteNodeGen extends QuoteNode {
             int exclude = exclude_;
             if ((exclude & 0b1) == 0 /* is-not-excluded quoteLong(VirtualFrame, long) */ && literalValue instanceof Long) {
                 long literalValue_ = (long) literalValue;
-                this.state_ = state | 0b10 /* add-active quoteLong(VirtualFrame, long) */;
-                lock.unlock();
-                hasLock = false;
-                return quoteLong(frameValue, literalValue_);
+                if ((isLongKind())) {
+                    this.state_ = state | 0b10 /* add-active quoteLong(VirtualFrame, long) */;
+                    lock.unlock();
+                    hasLock = false;
+                    return quoteLong(frameValue, literalValue_);
+                }
             }
             if ((exclude & 0b10) == 0 /* is-not-excluded quoteBoolean(VirtualFrame, boolean) */ && literalValue instanceof Boolean) {
                 boolean literalValue_ = (boolean) literalValue;
-                this.state_ = state | 0b100 /* add-active quoteBoolean(VirtualFrame, boolean) */;
-                lock.unlock();
-                hasLock = false;
-                return quoteBoolean(frameValue, literalValue_);
+                if ((isBooleanKind())) {
+                    this.state_ = state | 0b100 /* add-active quoteBoolean(VirtualFrame, boolean) */;
+                    lock.unlock();
+                    hasLock = false;
+                    return quoteBoolean(frameValue, literalValue_);
+                }
             }
-            if ((exclude & 0b100) == 0 /* is-not-excluded quoteDouble(VirtualFrame, double) */) {
-                int doubleCast0;
-                if ((doubleCast0 = TSchemeDataTypesGen.specializeImplicitDouble(literalValue)) != 0) {
-                    double literalValue_ = TSchemeDataTypesGen.asImplicitDouble(doubleCast0, literalValue);
-                    state = (state | (doubleCast0 << 5) /* set-implicit-active 0:double */);
+            if ((exclude & 0b100) == 0 /* is-not-excluded quoteDouble(VirtualFrame, double) */ && literalValue instanceof Double) {
+                double literalValue_ = (double) literalValue;
+                if ((isDoubleKind())) {
                     this.state_ = state | 0b1000 /* add-active quoteDouble(VirtualFrame, double) */;
                     lock.unlock();
                     hasLock = false;

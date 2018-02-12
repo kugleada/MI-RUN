@@ -14,7 +14,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-import tscheme.truffle.TSchemeDataTypesGen;
+import tscheme.truffle.datatypes.TSchemeDataTypesGen;
 import tscheme.truffle.nodetypes.TSchemeNode;
 
 @GeneratedBy(ModBuiltInNode.class)

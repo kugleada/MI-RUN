@@ -1,1 +1,5 @@
+tscheme/truffle/FibonacciTest.class
+tscheme/truffle/BuiltInTest.class
+tscheme/truffle/FactorialTest.class
+tscheme/truffle/BasicSyntaxTest.class
 tscheme/truffle/TSchemeMainTest.class

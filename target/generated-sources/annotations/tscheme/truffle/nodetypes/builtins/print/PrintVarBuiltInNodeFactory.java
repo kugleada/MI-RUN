@@ -11,7 +11,7 @@ import com.oracle.truffle.api.nodes.UnexpectedResultException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-import tscheme.truffle.TSchemeDataTypesGen;
+import tscheme.truffle.datatypes.TSchemeDataTypesGen;
 import tscheme.truffle.nodetypes.TSchemeNode;
 
 @GeneratedBy(PrintVarBuiltInNode.class)
@@ -71,12 +71,14 @@ public final class PrintVarBuiltInNodeFactory implements NodeFactory<PrintVarBui
         @Override
         public Object executeGeneric(VirtualFrame frameValue) {
             int state = state_;
-            if ((state & 0b1101) == 0 /* only-active println(long) */) {
+            if ((state & 0b11101) == 0 /* only-active printvar(long) */) {
                 return executeGeneric_long0(frameValue, state);
-            } else if ((state & 0b1011) == 0 /* only-active println(boolean) */) {
+            } else if ((state & 0b11011) == 0 /* only-active printvar(boolean) */) {
                 return executeGeneric_boolean1(frameValue, state);
+            } else if ((state & 0b10111) == 0 /* only-active printvar(double) */) {
+                return executeGeneric_double2(frameValue, state);
             } else {
-                return executeGeneric_generic2(frameValue, state);
+                return executeGeneric_generic3(frameValue, state);
             }
         }
 
@@ -87,8 +89,8 @@ public final class PrintVarBuiltInNodeFactory implements NodeFactory<PrintVarBui
             } catch (UnexpectedResultException ex) {
                 return executeAndSpecialize(ex.getResult());
             }
-            assert (state & 0b10) != 0 /* is-active println(long) */;
-            return println(arguments0Value_);
+            assert (state & 0b10) != 0 /* is-active printvar(long) */;
+            return printvar(arguments0Value_);
         }
 
         private Object executeGeneric_boolean1(VirtualFrame frameValue, int state) {
@@ -98,22 +100,37 @@ public final class PrintVarBuiltInNodeFactory implements NodeFactory<PrintVarBui
             } catch (UnexpectedResultException ex) {
                 return executeAndSpecialize(ex.getResult());
             }
-            assert (state & 0b100) != 0 /* is-active println(boolean) */;
-            return println(arguments0Value_);
+            assert (state & 0b100) != 0 /* is-active printvar(boolean) */;
+            return printvar(arguments0Value_);
         }
 
-        private Object executeGeneric_generic2(VirtualFrame frameValue, int state) {
+        private Object executeGeneric_double2(VirtualFrame frameValue, int state) {
+            double arguments0Value_;
+            try {
+                arguments0Value_ = arguments0_.executeDouble(frameValue);
+            } catch (UnexpectedResultException ex) {
+                return executeAndSpecialize(ex.getResult());
+            }
+            assert (state & 0b1000) != 0 /* is-active printvar(double) */;
+            return printvar(arguments0Value_);
+        }
+
+        private Object executeGeneric_generic3(VirtualFrame frameValue, int state) {
             Object arguments0Value_ = arguments0_.executeGeneric(frameValue);
-            if ((state & 0b10) != 0 /* is-active println(long) */ && arguments0Value_ instanceof Long) {
+            if ((state & 0b10) != 0 /* is-active printvar(long) */ && arguments0Value_ instanceof Long) {
                 long arguments0Value__ = (long) arguments0Value_;
-                return println(arguments0Value__);
+                return printvar(arguments0Value__);
             }
-            if ((state & 0b100) != 0 /* is-active println(boolean) */ && arguments0Value_ instanceof Boolean) {
+            if ((state & 0b100) != 0 /* is-active printvar(boolean) */ && arguments0Value_ instanceof Boolean) {
                 boolean arguments0Value__ = (boolean) arguments0Value_;
-                return println(arguments0Value__);
+                return printvar(arguments0Value__);
             }
-            if ((state & 0b1000) != 0 /* is-active println(Object) */) {
-                return println(arguments0Value_);
+            if ((state & 0b1000) != 0 /* is-active printvar(double) */ && arguments0Value_ instanceof Double) {
+                double arguments0Value__ = (double) arguments0Value_;
+                return printvar(arguments0Value__);
+            }
+            if ((state & 0b10000) != 0 /* is-active printvar(Object) */) {
+                return printvar(arguments0Value_);
             }
             CompilerDirectives.transferToInterpreterAndInvalidate();
             return executeAndSpecialize(arguments0Value_);
@@ -122,7 +139,7 @@ public final class PrintVarBuiltInNodeFactory implements NodeFactory<PrintVarBui
         @Override
         public boolean executeBoolean(VirtualFrame frameValue) throws UnexpectedResultException {
             int state = state_;
-            if ((state & 0b1000) != 0 /* is-active println(Object) */) {
+            if ((state & 0b10000) != 0 /* is-active printvar(Object) */) {
                 return TSchemeDataTypesGen.expectBoolean(executeGeneric(frameValue));
             }
             boolean arguments0Value_;
@@ -131,17 +148,36 @@ public final class PrintVarBuiltInNodeFactory implements NodeFactory<PrintVarBui
             } catch (UnexpectedResultException ex) {
                 return TSchemeDataTypesGen.expectBoolean(executeAndSpecialize(ex.getResult()));
             }
-            if ((state & 0b100) != 0 /* is-active println(boolean) */) {
-                return println(arguments0Value_);
+            if ((state & 0b100) != 0 /* is-active printvar(boolean) */) {
+                return printvar(arguments0Value_);
             }
             CompilerDirectives.transferToInterpreterAndInvalidate();
             return TSchemeDataTypesGen.expectBoolean(executeAndSpecialize(arguments0Value_));
         }
 
         @Override
+        public double executeDouble(VirtualFrame frameValue) throws UnexpectedResultException {
+            int state = state_;
+            if ((state & 0b10000) != 0 /* is-active printvar(Object) */) {
+                return TSchemeDataTypesGen.expectDouble(executeGeneric(frameValue));
+            }
+            double arguments0Value_;
+            try {
+                arguments0Value_ = arguments0_.executeDouble(frameValue);
+            } catch (UnexpectedResultException ex) {
+                return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(ex.getResult()));
+            }
+            if ((state & 0b1000) != 0 /* is-active printvar(double) */) {
+                return printvar(arguments0Value_);
+            }
+            CompilerDirectives.transferToInterpreterAndInvalidate();
+            return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(arguments0Value_));
+        }
+
+        @Override
         public long executeLong(VirtualFrame frameValue) throws UnexpectedResultException {
             int state = state_;
-            if ((state & 0b1000) != 0 /* is-active println(Object) */) {
+            if ((state & 0b10000) != 0 /* is-active printvar(Object) */) {
                 return TSchemeDataTypesGen.expectLong(executeGeneric(frameValue));
             }
             long arguments0Value_;
@@ -150,8 +186,8 @@ public final class PrintVarBuiltInNodeFactory implements NodeFactory<PrintVarBui
             } catch (UnexpectedResultException ex) {
                 return TSchemeDataTypesGen.expectLong(executeAndSpecialize(ex.getResult()));
             }
-            if ((state & 0b10) != 0 /* is-active println(long) */) {
-                return println(arguments0Value_);
+            if ((state & 0b10) != 0 /* is-active printvar(long) */) {
+                return printvar(arguments0Value_);
             }
             CompilerDirectives.transferToInterpreterAndInvalidate();
             return TSchemeDataTypesGen.expectLong(executeAndSpecialize(arguments0Value_));
@@ -165,22 +201,29 @@ public final class PrintVarBuiltInNodeFactory implements NodeFactory<PrintVarBui
                 int state = state_ & 0xfffffffe/* mask-active uninitialized*/;
                 if (arguments0Value instanceof Long) {
                     long arguments0Value_ = (long) arguments0Value;
-                    this.state_ = state | 0b10 /* add-active println(long) */;
+                    this.state_ = state | 0b10 /* add-active printvar(long) */;
                     lock.unlock();
                     hasLock = false;
-                    return println(arguments0Value_);
+                    return printvar(arguments0Value_);
                 }
                 if (arguments0Value instanceof Boolean) {
                     boolean arguments0Value_ = (boolean) arguments0Value;
-                    this.state_ = state | 0b100 /* add-active println(boolean) */;
+                    this.state_ = state | 0b100 /* add-active printvar(boolean) */;
                     lock.unlock();
                     hasLock = false;
-                    return println(arguments0Value_);
+                    return printvar(arguments0Value_);
                 }
-                this.state_ = state | 0b1000 /* add-active println(Object) */;
+                if (arguments0Value instanceof Double) {
+                    double arguments0Value_ = (double) arguments0Value;
+                    this.state_ = state | 0b1000 /* add-active printvar(double) */;
+                    lock.unlock();
+                    hasLock = false;
+                    return printvar(arguments0Value_);
+                }
+                this.state_ = state | 0b10000 /* add-active printvar(Object) */;
                 lock.unlock();
                 hasLock = false;
-                return println(arguments0Value);
+                return printvar(arguments0Value);
             } finally {
                 if (hasLock) {
                     lock.unlock();
@@ -193,7 +236,7 @@ public final class PrintVarBuiltInNodeFactory implements NodeFactory<PrintVarBui
             int state = state_ & 0xfffffffe/* mask-active uninitialized*/;
             if (state == 0b0) {
                 return NodeCost.UNINITIALIZED;
-            } else if (((state & 0b1110) & ((state & 0b1110) - 1)) == 0 /* is-single-active  */) {
+            } else if (((state & 0b11110) & ((state & 0b11110) - 1)) == 0 /* is-single-active  */) {
                 return NodeCost.MONOMORPHIC;
             }
             return NodeCost.POLYMORPHIC;

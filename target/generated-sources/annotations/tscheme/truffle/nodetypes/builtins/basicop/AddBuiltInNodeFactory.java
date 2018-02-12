@@ -14,8 +14,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-import tscheme.truffle.TSchemeDataTypes;
-import tscheme.truffle.TSchemeDataTypesGen;
+import tscheme.truffle.datatypes.TSchemeDataTypesGen;
 import tscheme.truffle.nodetypes.TSchemeNode;
 
 @GeneratedBy(AddBuiltInNode.class)
@@ -78,13 +77,13 @@ public final class AddBuiltInNodeFactory implements NodeFactory<AddBuiltInNode> 
         @Override
         public Object executeGeneric(VirtualFrame frameValue) {
             int state = state_;
-            if ((state & 0b11111101) == 0 /* only-active add(long, long) */) {
+            if ((state & 0b1111101) == 0 /* only-active add(long, long) */) {
                 return executeGeneric_long_long0(frameValue, state);
-            } else if ((state & 0b11110111) == 0 /* only-active add(double, double) */) {
+            } else if ((state & 0b1110111) == 0 /* only-active add(double, double) */) {
                 return executeGeneric_double_double1(frameValue, state);
-            } else if ((state & 0b11011111) == 0 /* only-active add(String, long) */) {
-                return executeGeneric_long2(frameValue, state);
-            } else if ((state & 0b1111111) == 0 /* only-active add(String, double) */) {
+            } else if ((state & 0b1101111) == 0 /* only-active add(double, long) */) {
+                return executeGeneric_double_long2(frameValue, state);
+            } else if ((state & 0b1011111) == 0 /* only-active add(double, BigInteger) */) {
                 return executeGeneric_double3(frameValue, state);
             } else {
                 return executeGeneric_generic4(frameValue, state);
@@ -123,82 +122,57 @@ public final class AddBuiltInNodeFactory implements NodeFactory<AddBuiltInNode> 
         }
 
         private Object executeGeneric_double_double1(VirtualFrame frameValue, int state) {
-            long arguments0Value_long = 0L;
             double arguments0Value_;
             try {
-                if ((state & 0b110000000000001) == 0 /* only-active 0:double */) {
-                    arguments0Value_long = arguments0_.executeLong(frameValue);
-                    arguments0Value_ = TSchemeDataTypes.castLongToDouble(arguments0Value_long);
-                } else if ((state & 0b101000000000001) == 0 /* only-active 0:double */) {
-                    arguments0Value_ = arguments0_.executeDouble(frameValue);
-                } else {
-                    Object arguments0Value__ = arguments0_.executeGeneric(frameValue);
-                    arguments0Value_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0b111000000000000) >>> 12 /* extract-implicit-active 0:double */, arguments0Value__);
-                }
+                arguments0Value_ = arguments0_.executeDouble(frameValue);
             } catch (UnexpectedResultException ex) {
                 Object arguments1Value = arguments1_.executeGeneric(frameValue);
                 return executeAndSpecialize(ex.getResult(), arguments1Value);
             }
-            long arguments1Value_long = 0L;
             double arguments1Value_;
             try {
-                if ((state & 0x30001) == 0 /* only-active 1:double */) {
-                    arguments1Value_long = arguments1_.executeLong(frameValue);
-                    arguments1Value_ = TSchemeDataTypes.castLongToDouble(arguments1Value_long);
-                } else if ((state & 0x28001) == 0 /* only-active 1:double */) {
-                    arguments1Value_ = arguments1_.executeDouble(frameValue);
-                } else {
-                    Object arguments1Value__ = arguments1_.executeGeneric(frameValue);
-                    arguments1Value_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0x38000) >>> 15 /* extract-implicit-active 1:double */, arguments1Value__);
-                }
+                arguments1Value_ = arguments1_.executeDouble(frameValue);
             } catch (UnexpectedResultException ex) {
-                return executeAndSpecialize(((state & 0b110000000000001) == 0 /* only-active 0:double */ ? (Object) arguments0Value_long : (Object) arguments0Value_), ex.getResult());
+                return executeAndSpecialize(arguments0Value_, ex.getResult());
             }
             assert (state & 0b1000) != 0 /* is-active add(double, double) */;
             return add(arguments0Value_, arguments1Value_);
         }
 
-        private Object executeGeneric_long2(VirtualFrame frameValue, int state) {
-            Object arguments0Value_ = arguments0_.executeGeneric(frameValue);
+        private Object executeGeneric_double_long2(VirtualFrame frameValue, int state) {
+            double arguments0Value_;
+            try {
+                arguments0Value_ = arguments0_.executeDouble(frameValue);
+            } catch (UnexpectedResultException ex) {
+                Object arguments1Value = arguments1_.executeGeneric(frameValue);
+                return executeAndSpecialize(ex.getResult(), arguments1Value);
+            }
             long arguments1Value_;
             try {
                 arguments1Value_ = arguments1_.executeLong(frameValue);
             } catch (UnexpectedResultException ex) {
                 return executeAndSpecialize(arguments0Value_, ex.getResult());
             }
-            assert (state & 0b100000) != 0 /* is-active add(String, long) */;
-            if (arguments0Value_ instanceof String) {
-                String arguments0Value__ = (String) arguments0Value_;
-                return add(arguments0Value__, arguments1Value_);
-            }
-            CompilerDirectives.transferToInterpreterAndInvalidate();
-            return executeAndSpecialize(arguments0Value_, arguments1Value_);
+            assert (state & 0b10000) != 0 /* is-active add(double, long) */;
+            return add(arguments0Value_, arguments1Value_);
         }
 
         private Object executeGeneric_double3(VirtualFrame frameValue, int state) {
-            Object arguments0Value_ = arguments0_.executeGeneric(frameValue);
-            long arguments1Value_long = 0L;
-            double arguments1Value_;
+            double arguments0Value_;
             try {
-                if ((state & 0x30001) == 0 /* only-active 1:double */) {
-                    arguments1Value_long = arguments1_.executeLong(frameValue);
-                    arguments1Value_ = TSchemeDataTypes.castLongToDouble(arguments1Value_long);
-                } else if ((state & 0x28001) == 0 /* only-active 1:double */) {
-                    arguments1Value_ = arguments1_.executeDouble(frameValue);
-                } else {
-                    Object arguments1Value__ = arguments1_.executeGeneric(frameValue);
-                    arguments1Value_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0x38000) >>> 15 /* extract-implicit-active 1:double */, arguments1Value__);
-                }
+                arguments0Value_ = arguments0_.executeDouble(frameValue);
             } catch (UnexpectedResultException ex) {
-                return executeAndSpecialize(arguments0Value_, ex.getResult());
+                Object arguments1Value = arguments1_.executeGeneric(frameValue);
+                return executeAndSpecialize(ex.getResult(), arguments1Value);
             }
-            assert (state & 0b10000000) != 0 /* is-active add(String, double) */;
-            if (arguments0Value_ instanceof String) {
-                String arguments0Value__ = (String) arguments0Value_;
-                return add(arguments0Value__, arguments1Value_);
+            Object arguments1Value_ = arguments1_.executeGeneric(frameValue);
+            assert (state & 0b100000) != 0 /* is-active add(double, BigInteger) */;
+            if (TSchemeDataTypesGen.isImplicitBigInteger((state & 0b11000000000) >>> 9 /* extract-implicit-active 1:BigInteger */, arguments1Value_)) {
+                BigInteger arguments1Value__ = TSchemeDataTypesGen.asImplicitBigInteger((state & 0b11000000000) >>> 9 /* extract-implicit-active 1:BigInteger */, arguments1Value_);
+                return add(arguments0Value_, arguments1Value__);
             }
             CompilerDirectives.transferToInterpreterAndInvalidate();
-            return executeAndSpecialize(arguments0Value_, ((state & 0x30001) == 0 /* only-active 1:double */ ? (Object) arguments1Value_long : (Object) arguments1Value_));
+            return executeAndSpecialize(arguments0Value_, arguments1Value_);
         }
 
         private Object executeGeneric_generic4(VirtualFrame frameValue, int state) {
@@ -224,36 +198,32 @@ public final class AddBuiltInNodeFactory implements NodeFactory<AddBuiltInNode> 
                     }
                 }
             }
-            if ((state & 0b100) != 0 /* is-active add(BigInteger, BigInteger) */ && TSchemeDataTypesGen.isImplicitBigInteger((state & 0b1100000000) >>> 8 /* extract-implicit-active 0:BigInteger */, arguments0Value_)) {
-                BigInteger arguments0Value__ = TSchemeDataTypesGen.asImplicitBigInteger((state & 0b1100000000) >>> 8 /* extract-implicit-active 0:BigInteger */, arguments0Value_);
-                if (TSchemeDataTypesGen.isImplicitBigInteger((state & 0b110000000000) >>> 10 /* extract-implicit-active 1:BigInteger */, arguments1Value_)) {
-                    BigInteger arguments1Value__ = TSchemeDataTypesGen.asImplicitBigInteger((state & 0b110000000000) >>> 10 /* extract-implicit-active 1:BigInteger */, arguments1Value_);
+            if ((state & 0b100) != 0 /* is-active add(BigInteger, BigInteger) */ && TSchemeDataTypesGen.isImplicitBigInteger((state & 0b110000000) >>> 7 /* extract-implicit-active 0:BigInteger */, arguments0Value_)) {
+                BigInteger arguments0Value__ = TSchemeDataTypesGen.asImplicitBigInteger((state & 0b110000000) >>> 7 /* extract-implicit-active 0:BigInteger */, arguments0Value_);
+                if (TSchemeDataTypesGen.isImplicitBigInteger((state & 0b11000000000) >>> 9 /* extract-implicit-active 1:BigInteger */, arguments1Value_)) {
+                    BigInteger arguments1Value__ = TSchemeDataTypesGen.asImplicitBigInteger((state & 0b11000000000) >>> 9 /* extract-implicit-active 1:BigInteger */, arguments1Value_);
                     return add(arguments0Value__, arguments1Value__);
                 }
             }
-            if ((state & 0b1000) != 0 /* is-active add(double, double) */ && TSchemeDataTypesGen.isImplicitDouble((state & 0b111000000000000) >>> 12 /* extract-implicit-active 0:double */, arguments0Value_)) {
-                double arguments0Value__ = TSchemeDataTypesGen.asImplicitDouble((state & 0b111000000000000) >>> 12 /* extract-implicit-active 0:double */, arguments0Value_);
-                if (TSchemeDataTypesGen.isImplicitDouble((state & 0x38000) >>> 15 /* extract-implicit-active 1:double */, arguments1Value_)) {
-                    double arguments1Value__ = TSchemeDataTypesGen.asImplicitDouble((state & 0x38000) >>> 15 /* extract-implicit-active 1:double */, arguments1Value_);
+            if ((state & 0b111000) != 0 /* is-active add(double, double) || add(double, long) || add(double, BigInteger) */ && arguments0Value_ instanceof Double) {
+                double arguments0Value__ = (double) arguments0Value_;
+                if ((state & 0b1000) != 0 /* is-active add(double, double) */ && arguments1Value_ instanceof Double) {
+                    double arguments1Value__ = (double) arguments1Value_;
                     return add(arguments0Value__, arguments1Value__);
                 }
-            }
-            if ((state & 0b11110000) != 0 /* is-active add(String, String) || add(String, long) || add(String, BigInteger) || add(String, double) */ && arguments0Value_ instanceof String) {
-                String arguments0Value__ = (String) arguments0Value_;
-                if ((state & 0b10000) != 0 /* is-active add(String, String) */ && arguments1Value_ instanceof String) {
-                    String arguments1Value__ = (String) arguments1Value_;
-                    return add(arguments0Value__, arguments1Value__);
-                }
-                if ((state & 0b100000) != 0 /* is-active add(String, long) */ && arguments1Value_ instanceof Long) {
+                if ((state & 0b10000) != 0 /* is-active add(double, long) */ && arguments1Value_ instanceof Long) {
                     long arguments1Value__ = (long) arguments1Value_;
                     return add(arguments0Value__, arguments1Value__);
                 }
-                if ((state & 0b1000000) != 0 /* is-active add(String, BigInteger) */ && TSchemeDataTypesGen.isImplicitBigInteger((state & 0b110000000000) >>> 10 /* extract-implicit-active 1:BigInteger */, arguments1Value_)) {
-                    BigInteger arguments1Value__ = TSchemeDataTypesGen.asImplicitBigInteger((state & 0b110000000000) >>> 10 /* extract-implicit-active 1:BigInteger */, arguments1Value_);
+                if ((state & 0b100000) != 0 /* is-active add(double, BigInteger) */ && TSchemeDataTypesGen.isImplicitBigInteger((state & 0b11000000000) >>> 9 /* extract-implicit-active 1:BigInteger */, arguments1Value_)) {
+                    BigInteger arguments1Value__ = TSchemeDataTypesGen.asImplicitBigInteger((state & 0b11000000000) >>> 9 /* extract-implicit-active 1:BigInteger */, arguments1Value_);
                     return add(arguments0Value__, arguments1Value__);
                 }
-                if ((state & 0b10000000) != 0 /* is-active add(String, double) */ && TSchemeDataTypesGen.isImplicitDouble((state & 0x38000) >>> 15 /* extract-implicit-active 1:double */, arguments1Value_)) {
-                    double arguments1Value__ = TSchemeDataTypesGen.asImplicitDouble((state & 0x38000) >>> 15 /* extract-implicit-active 1:double */, arguments1Value_);
+            }
+            if ((state & 0b1000000) != 0 /* is-active add(String, String) */ && TSchemeDataTypesGen.isImplicitString((state & 0b111100000000000) >>> 11 /* extract-implicit-active 0:String */, arguments0Value_)) {
+                String arguments0Value__ = TSchemeDataTypesGen.asImplicitString((state & 0b111100000000000) >>> 11 /* extract-implicit-active 0:String */, arguments0Value_);
+                if (TSchemeDataTypesGen.isImplicitString((state & 0x78000) >>> 15 /* extract-implicit-active 1:String */, arguments1Value_)) {
+                    String arguments1Value__ = TSchemeDataTypesGen.asImplicitString((state & 0x78000) >>> 15 /* extract-implicit-active 1:String */, arguments1Value_);
                     return add(arguments0Value__, arguments1Value__);
                 }
             }
@@ -264,42 +234,60 @@ public final class AddBuiltInNodeFactory implements NodeFactory<AddBuiltInNode> 
         @Override
         public double executeDouble(VirtualFrame frameValue) throws UnexpectedResultException {
             int state = state_;
-            long arguments0Value_long = 0L;
             double arguments0Value_;
             try {
-                if ((state & 0b110000000000001) == 0 /* only-active 0:double */) {
-                    arguments0Value_long = arguments0_.executeLong(frameValue);
-                    arguments0Value_ = TSchemeDataTypes.castLongToDouble(arguments0Value_long);
-                } else if ((state & 0b101000000000001) == 0 /* only-active 0:double */) {
-                    arguments0Value_ = arguments0_.executeDouble(frameValue);
-                } else {
-                    Object arguments0Value__ = arguments0_.executeGeneric(frameValue);
-                    arguments0Value_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0b111000000000000) >>> 12 /* extract-implicit-active 0:double */, arguments0Value__);
-                }
+                arguments0Value_ = arguments0_.executeDouble(frameValue);
             } catch (UnexpectedResultException ex) {
                 Object arguments1Value = arguments1_.executeGeneric(frameValue);
                 return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(ex.getResult(), arguments1Value));
             }
-            long arguments1Value_long = 0L;
+            if ((state & 0b1110111) == 0 /* only-active add(double, double) */) {
+                return executeDouble_double5(frameValue, state, arguments0Value_);
+            } else if ((state & 0b1101111) == 0 /* only-active add(double, long) */) {
+                return executeDouble_long6(frameValue, state, arguments0Value_);
+            } else {
+                return executeDouble_generic7(frameValue, state, arguments0Value_);
+            }
+        }
+
+        private double executeDouble_double5(VirtualFrame frameValue, int state, double arguments0Value_) throws UnexpectedResultException {
             double arguments1Value_;
             try {
-                if ((state & 0x30001) == 0 /* only-active 1:double */) {
-                    arguments1Value_long = arguments1_.executeLong(frameValue);
-                    arguments1Value_ = TSchemeDataTypes.castLongToDouble(arguments1Value_long);
-                } else if ((state & 0x28001) == 0 /* only-active 1:double */) {
-                    arguments1Value_ = arguments1_.executeDouble(frameValue);
-                } else {
-                    Object arguments1Value__ = arguments1_.executeGeneric(frameValue);
-                    arguments1Value_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0x38000) >>> 15 /* extract-implicit-active 1:double */, arguments1Value__);
-                }
+                arguments1Value_ = arguments1_.executeDouble(frameValue);
             } catch (UnexpectedResultException ex) {
-                return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(((state & 0b110000000000001) == 0 /* only-active 0:double */ ? (Object) arguments0Value_long : (Object) arguments0Value_), ex.getResult()));
+                return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(arguments0Value_, ex.getResult()));
             }
-            if ((state & 0b1000) != 0 /* is-active add(double, double) */) {
-                return add(arguments0Value_, arguments1Value_);
+            assert (state & 0b1000) != 0 /* is-active add(double, double) */;
+            return add(arguments0Value_, arguments1Value_);
+        }
+
+        private double executeDouble_long6(VirtualFrame frameValue, int state, double arguments0Value_) throws UnexpectedResultException {
+            long arguments1Value_;
+            try {
+                arguments1Value_ = arguments1_.executeLong(frameValue);
+            } catch (UnexpectedResultException ex) {
+                return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(arguments0Value_, ex.getResult()));
+            }
+            assert (state & 0b10000) != 0 /* is-active add(double, long) */;
+            return add(arguments0Value_, arguments1Value_);
+        }
+
+        private double executeDouble_generic7(VirtualFrame frameValue, int state, double arguments0Value_) throws UnexpectedResultException {
+            Object arguments1Value_ = arguments1_.executeGeneric(frameValue);
+            if ((state & 0b1000) != 0 /* is-active add(double, double) */ && arguments1Value_ instanceof Double) {
+                double arguments1Value__ = (double) arguments1Value_;
+                return add(arguments0Value_, arguments1Value__);
+            }
+            if ((state & 0b10000) != 0 /* is-active add(double, long) */ && arguments1Value_ instanceof Long) {
+                long arguments1Value__ = (long) arguments1Value_;
+                return add(arguments0Value_, arguments1Value__);
+            }
+            if ((state & 0b100000) != 0 /* is-active add(double, BigInteger) */ && TSchemeDataTypesGen.isImplicitBigInteger((state & 0b11000000000) >>> 9 /* extract-implicit-active 1:BigInteger */, arguments1Value_)) {
+                BigInteger arguments1Value__ = TSchemeDataTypesGen.asImplicitBigInteger((state & 0b11000000000) >>> 9 /* extract-implicit-active 1:BigInteger */, arguments1Value_);
+                return add(arguments0Value_, arguments1Value__);
             }
             CompilerDirectives.transferToInterpreterAndInvalidate();
-            return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(((state & 0b110000000000001) == 0 /* only-active 0:double */ ? (Object) arguments0Value_long : (Object) arguments0Value_), ((state & 0x30001) == 0 /* only-active 1:double */ ? (Object) arguments1Value_long : (Object) arguments1Value_)));
+            return TSchemeDataTypesGen.expectDouble(executeAndSpecialize(arguments0Value_, arguments1Value_));
         }
 
         @Override
@@ -374,8 +362,8 @@ public final class AddBuiltInNodeFactory implements NodeFactory<AddBuiltInNode> 
                         int bigIntegerCast1;
                         if ((bigIntegerCast1 = TSchemeDataTypesGen.specializeImplicitBigInteger(arguments1Value)) != 0) {
                             BigInteger arguments1Value_ = TSchemeDataTypesGen.asImplicitBigInteger(bigIntegerCast1, arguments1Value);
-                            state = (state | (bigIntegerCast0 << 8) /* set-implicit-active 0:BigInteger */);
-                            state = (state | (bigIntegerCast1 << 10) /* set-implicit-active 1:BigInteger */);
+                            state = (state | (bigIntegerCast0 << 7) /* set-implicit-active 0:BigInteger */);
+                            state = (state | (bigIntegerCast1 << 9) /* set-implicit-active 1:BigInteger */);
                             this.state_ = state | 0b100 /* add-active add(BigInteger, BigInteger) */;
                             lock.unlock();
                             hasLock = false;
@@ -383,34 +371,18 @@ public final class AddBuiltInNodeFactory implements NodeFactory<AddBuiltInNode> 
                         }
                     }
                 }
-                {
-                    int doubleCast0;
-                    if ((doubleCast0 = TSchemeDataTypesGen.specializeImplicitDouble(arguments0Value)) != 0) {
-                        double arguments0Value_ = TSchemeDataTypesGen.asImplicitDouble(doubleCast0, arguments0Value);
-                        int doubleCast1;
-                        if ((doubleCast1 = TSchemeDataTypesGen.specializeImplicitDouble(arguments1Value)) != 0) {
-                            double arguments1Value_ = TSchemeDataTypesGen.asImplicitDouble(doubleCast1, arguments1Value);
-                            state = (state | (doubleCast0 << 12) /* set-implicit-active 0:double */);
-                            state = (state | (doubleCast1 << 15) /* set-implicit-active 1:double */);
-                            this.state_ = state | 0b1000 /* add-active add(double, double) */;
-                            lock.unlock();
-                            hasLock = false;
-                            return add(arguments0Value_, arguments1Value_);
-                        }
-                    }
-                }
-                if (arguments0Value instanceof String) {
-                    String arguments0Value_ = (String) arguments0Value;
-                    if (arguments1Value instanceof String) {
-                        String arguments1Value_ = (String) arguments1Value;
-                        this.state_ = state | 0b10000 /* add-active add(String, String) */;
+                if (arguments0Value instanceof Double) {
+                    double arguments0Value_ = (double) arguments0Value;
+                    if (arguments1Value instanceof Double) {
+                        double arguments1Value_ = (double) arguments1Value;
+                        this.state_ = state | 0b1000 /* add-active add(double, double) */;
                         lock.unlock();
                         hasLock = false;
                         return add(arguments0Value_, arguments1Value_);
                     }
                     if (arguments1Value instanceof Long) {
                         long arguments1Value_ = (long) arguments1Value;
-                        this.state_ = state | 0b100000 /* add-active add(String, long) */;
+                        this.state_ = state | 0b10000 /* add-active add(double, long) */;
                         lock.unlock();
                         hasLock = false;
                         return add(arguments0Value_, arguments1Value_);
@@ -419,19 +391,24 @@ public final class AddBuiltInNodeFactory implements NodeFactory<AddBuiltInNode> 
                         int bigIntegerCast1;
                         if ((bigIntegerCast1 = TSchemeDataTypesGen.specializeImplicitBigInteger(arguments1Value)) != 0) {
                             BigInteger arguments1Value_ = TSchemeDataTypesGen.asImplicitBigInteger(bigIntegerCast1, arguments1Value);
-                            state = (state | (bigIntegerCast1 << 10) /* set-implicit-active 1:BigInteger */);
-                            this.state_ = state | 0b1000000 /* add-active add(String, BigInteger) */;
+                            state = (state | (bigIntegerCast1 << 9) /* set-implicit-active 1:BigInteger */);
+                            this.state_ = state | 0b100000 /* add-active add(double, BigInteger) */;
                             lock.unlock();
                             hasLock = false;
                             return add(arguments0Value_, arguments1Value_);
                         }
                     }
-                    {
-                        int doubleCast1;
-                        if ((doubleCast1 = TSchemeDataTypesGen.specializeImplicitDouble(arguments1Value)) != 0) {
-                            double arguments1Value_ = TSchemeDataTypesGen.asImplicitDouble(doubleCast1, arguments1Value);
-                            state = (state | (doubleCast1 << 15) /* set-implicit-active 1:double */);
-                            this.state_ = state | 0b10000000 /* add-active add(String, double) */;
+                }
+                {
+                    int stringCast0;
+                    if ((stringCast0 = TSchemeDataTypesGen.specializeImplicitString(arguments0Value)) != 0) {
+                        String arguments0Value_ = TSchemeDataTypesGen.asImplicitString(stringCast0, arguments0Value);
+                        int stringCast1;
+                        if ((stringCast1 = TSchemeDataTypesGen.specializeImplicitString(arguments1Value)) != 0) {
+                            String arguments1Value_ = TSchemeDataTypesGen.asImplicitString(stringCast1, arguments1Value);
+                            state = (state | (stringCast0 << 11) /* set-implicit-active 0:String */);
+                            state = (state | (stringCast1 << 15) /* set-implicit-active 1:String */);
+                            this.state_ = state | 0b1000000 /* add-active add(String, String) */;
                             lock.unlock();
                             hasLock = false;
                             return add(arguments0Value_, arguments1Value_);
@@ -452,7 +429,7 @@ public final class AddBuiltInNodeFactory implements NodeFactory<AddBuiltInNode> 
             int state = state_ & 0xfffffffe/* mask-active uninitialized*/;
             if (state == 0b0) {
                 return NodeCost.UNINITIALIZED;
-            } else if (((state & 0b11111110) & ((state & 0b11111110) - 1)) == 0 /* is-single-active  */) {
+            } else if (((state & 0b1111110) & ((state & 0b1111110) - 1)) == 0 /* is-single-active  */) {
                 return NodeCost.MONOMORPHIC;
             }
             return NodeCost.POLYMORPHIC;

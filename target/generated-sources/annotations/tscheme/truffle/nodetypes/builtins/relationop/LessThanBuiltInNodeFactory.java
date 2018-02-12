@@ -14,8 +14,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-import tscheme.truffle.TSchemeDataTypes;
-import tscheme.truffle.TSchemeDataTypesGen;
+import tscheme.truffle.datatypes.TSchemeDataTypesGen;
 import tscheme.truffle.nodetypes.TSchemeNode;
 
 @GeneratedBy(LessThanBuiltInNode.class)
@@ -105,36 +104,18 @@ public final class LessThanBuiltInNodeFactory implements NodeFactory<LessThanBui
         }
 
         private boolean executeBoolean_double_double1(VirtualFrame frameValue, int state) {
-            long arguments0Value_long = 0L;
             double arguments0Value_;
             try {
-                if ((state & 0b11000000001) == 0 /* only-active 0:double */) {
-                    arguments0Value_long = arguments0_.executeLong(frameValue);
-                    arguments0Value_ = TSchemeDataTypes.castLongToDouble(arguments0Value_long);
-                } else if ((state & 0b10100000001) == 0 /* only-active 0:double */) {
-                    arguments0Value_ = arguments0_.executeDouble(frameValue);
-                } else {
-                    Object arguments0Value__ = arguments0_.executeGeneric(frameValue);
-                    arguments0Value_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0b11100000000) >>> 8 /* extract-implicit-active 0:double */, arguments0Value__);
-                }
+                arguments0Value_ = arguments0_.executeDouble(frameValue);
             } catch (UnexpectedResultException ex) {
                 Object arguments1Value = arguments1_.executeGeneric(frameValue);
                 return executeAndSpecialize(ex.getResult(), arguments1Value);
             }
-            long arguments1Value_long = 0L;
             double arguments1Value_;
             try {
-                if ((state & 0b11000000000001) == 0 /* only-active 1:double */) {
-                    arguments1Value_long = arguments1_.executeLong(frameValue);
-                    arguments1Value_ = TSchemeDataTypes.castLongToDouble(arguments1Value_long);
-                } else if ((state & 0b10100000000001) == 0 /* only-active 1:double */) {
-                    arguments1Value_ = arguments1_.executeDouble(frameValue);
-                } else {
-                    Object arguments1Value__ = arguments1_.executeGeneric(frameValue);
-                    arguments1Value_ = TSchemeDataTypesGen.expectImplicitDouble((state & 0b11100000000000) >>> 11 /* extract-implicit-active 1:double */, arguments1Value__);
-                }
+                arguments1Value_ = arguments1_.executeDouble(frameValue);
             } catch (UnexpectedResultException ex) {
-                return executeAndSpecialize(((state & 0b11000000001) == 0 /* only-active 0:double */ ? (Object) arguments0Value_long : (Object) arguments0Value_), ex.getResult());
+                return executeAndSpecialize(arguments0Value_, ex.getResult());
             }
             assert (state & 0b1000) != 0 /* is-active lessThan(double, double) */;
             return lessThan(arguments0Value_, arguments1Value_);
@@ -157,10 +138,10 @@ public final class LessThanBuiltInNodeFactory implements NodeFactory<LessThanBui
                     return lessThan(arguments0Value__, arguments1Value__);
                 }
             }
-            if ((state & 0b1000) != 0 /* is-active lessThan(double, double) */ && TSchemeDataTypesGen.isImplicitDouble((state & 0b11100000000) >>> 8 /* extract-implicit-active 0:double */, arguments0Value_)) {
-                double arguments0Value__ = TSchemeDataTypesGen.asImplicitDouble((state & 0b11100000000) >>> 8 /* extract-implicit-active 0:double */, arguments0Value_);
-                if (TSchemeDataTypesGen.isImplicitDouble((state & 0b11100000000000) >>> 11 /* extract-implicit-active 1:double */, arguments1Value_)) {
-                    double arguments1Value__ = TSchemeDataTypesGen.asImplicitDouble((state & 0b11100000000000) >>> 11 /* extract-implicit-active 1:double */, arguments1Value_);
+            if ((state & 0b1000) != 0 /* is-active lessThan(double, double) */ && arguments0Value_ instanceof Double) {
+                double arguments0Value__ = (double) arguments0Value_;
+                if (arguments1Value_ instanceof Double) {
+                    double arguments1Value__ = (double) arguments1Value_;
                     return lessThan(arguments0Value__, arguments1Value__);
                 }
             }
@@ -205,20 +186,14 @@ public final class LessThanBuiltInNodeFactory implements NodeFactory<LessThanBui
                         }
                     }
                 }
-                {
-                    int doubleCast0;
-                    if ((doubleCast0 = TSchemeDataTypesGen.specializeImplicitDouble(arguments0Value)) != 0) {
-                        double arguments0Value_ = TSchemeDataTypesGen.asImplicitDouble(doubleCast0, arguments0Value);
-                        int doubleCast1;
-                        if ((doubleCast1 = TSchemeDataTypesGen.specializeImplicitDouble(arguments1Value)) != 0) {
-                            double arguments1Value_ = TSchemeDataTypesGen.asImplicitDouble(doubleCast1, arguments1Value);
-                            state = (state | (doubleCast0 << 8) /* set-implicit-active 0:double */);
-                            state = (state | (doubleCast1 << 11) /* set-implicit-active 1:double */);
-                            this.state_ = state | 0b1000 /* add-active lessThan(double, double) */;
-                            lock.unlock();
-                            hasLock = false;
-                            return lessThan(arguments0Value_, arguments1Value_);
-                        }
+                if (arguments0Value instanceof Double) {
+                    double arguments0Value_ = (double) arguments0Value;
+                    if (arguments1Value instanceof Double) {
+                        double arguments1Value_ = (double) arguments1Value;
+                        this.state_ = state | 0b1000 /* add-active lessThan(double, double) */;
+                        lock.unlock();
+                        hasLock = false;
+                        return lessThan(arguments0Value_, arguments1Value_);
                     }
                 }
                 CompilerDirectives.transferToInterpreterAndInvalidate();

@@ -28,12 +28,12 @@ public final class LambdaNodeGen extends LambdaNode {
     @Override
     public Object executeGeneric(VirtualFrame frameValue) {
         int state = state_;
-        if ((state & 0b10) != 0 /* is-active getScopedFunction(VirtualFrame) */) {
+        if ((state & 0b10) != 0 /* is-active getFunctionWithScope(VirtualFrame) */) {
             assert (isScopeSet());
-            return getScopedFunction(frameValue);
+            return getFunctionWithScope(frameValue);
         }
-        if ((state & 0b100) != 0 /* is-active getMumblerFunction(VirtualFrame) */) {
-            return getMumblerFunction(frameValue);
+        if ((state & 0b100) != 0 /* is-active getTSchemeFunction(VirtualFrame) */) {
+            return getTSchemeFunction(frameValue);
         }
         CompilerDirectives.transferToInterpreterAndInvalidate();
         return executeAndSpecialize(frameValue);
@@ -46,20 +46,20 @@ public final class LambdaNodeGen extends LambdaNode {
         try {
             int state = state_ & 0xfffffffe/* mask-active uninitialized*/;
             int exclude = exclude_;
-            if ((exclude & 0b1) == 0 /* is-not-excluded getScopedFunction(VirtualFrame) */) {
+            if ((exclude & 0b1) == 0 /* is-not-excluded getFunctionWithScope(VirtualFrame) */) {
                 if ((isScopeSet())) {
-                    this.state_ = state | 0b10 /* add-active getScopedFunction(VirtualFrame) */;
+                    this.state_ = state | 0b10 /* add-active getFunctionWithScope(VirtualFrame) */;
                     lock.unlock();
                     hasLock = false;
-                    return getScopedFunction(frameValue);
+                    return getFunctionWithScope(frameValue);
                 }
             }
-            this.exclude_ = exclude | 0b1 /* add-excluded getScopedFunction(VirtualFrame) */;
-            state = state & 0xfffffffd /* remove-active getScopedFunction(VirtualFrame) */;
-            this.state_ = state | 0b100 /* add-active getMumblerFunction(VirtualFrame) */;
+            this.exclude_ = exclude | 0b1 /* add-excluded getFunctionWithScope(VirtualFrame) */;
+            state = state & 0xfffffffd /* remove-active getFunctionWithScope(VirtualFrame) */;
+            this.state_ = state | 0b100 /* add-active getTSchemeFunction(VirtualFrame) */;
             lock.unlock();
             hasLock = false;
-            return getMumblerFunction(frameValue);
+            return getTSchemeFunction(frameValue);
         } finally {
             if (hasLock) {
                 lock.unlock();
