@@ -40,6 +40,31 @@ There is implicit cast from long to BigInteger. Also implicit casts from long/Bi
 Built-in functions have specializations for most of basic datatypes.
 
 
+# Benchmarks and measurements
+
+### Factorial of 500:
+HotSpot VM
+* Tail Optimization enabled: 509ms
+* Tail Optimization not enabled: 525ms
+
+Graal VM
+* Tail Optimization enabled: 621ms
+* Tail Optimization not enabled: 610ms
+
+### Factorial 1000 (not possible to run without Tail Optimization):
+* HotSpot VM: 565ms
+* Graal VM: 648ms
+
+### 35th Fibonacci number
+HotSpot VM:
+* Tail Optimization enabled: 8660ms
+* Tail Optimization NOT enabled: 5699ms
+
+Graal VM:
+* Tail Optimization enabled: 7904ms
+* Tail Optimization NOT enabled: 5927ms
+
+
 # Installation
 
 ### Pre-requirements
