@@ -3,10 +3,12 @@ package tscheme.truffle.parser;
 import java.util.HashMap;
 import java.util.Map;
 
-import tscheme.truffle.syntax.ListSyntax;
-import tscheme.truffle.syntax.SymbolSyntax;
+import tscheme.truffle.parser.syntax.ListSyntax;
+import tscheme.truffle.parser.syntax.SymbolSyntax;
 import tscheme.truffle.datatypes.TSchemeList;
 import tscheme.truffle.datatypes.TSchemeSymbol;
+import tscheme.truffle.parser.syntax.Syntax;
+import tscheme.truffle.parser.syntax.SyntaxExpressionListener;
 
 /**
  * Class serves for syntax check, i.e. does define have two arguments?

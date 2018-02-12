@@ -4,7 +4,7 @@ import com.oracle.truffle.api.source.Source;
 import tscheme.truffle.nodetypes.TSchemeNode;
 import tscheme.truffle.parser.Converter;
 import tscheme.truffle.parser.Reader;
-import tscheme.truffle.syntax.ListSyntax;
+import tscheme.truffle.parser.syntax.ListSyntax;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

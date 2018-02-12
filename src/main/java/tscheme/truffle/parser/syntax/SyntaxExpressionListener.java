@@ -1,7 +1,6 @@
-package tscheme.truffle.parser;
+package tscheme.truffle.parser.syntax;
 
-import tscheme.truffle.syntax.ListSyntax;
-import tscheme.truffle.syntax.SymbolSyntax;
+import tscheme.truffle.parser.Reader;
 import tscheme.truffle.datatypes.TSchemeList;
 
 /**

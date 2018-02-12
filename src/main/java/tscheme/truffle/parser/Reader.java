@@ -5,10 +5,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import tscheme.truffle.parser.TSchemeBaseVisitor;
-import tscheme.truffle.parser.TSchemeLexer;
-import tscheme.truffle.parser.TSchemeParser;
-import tscheme.truffle.syntax.*;
+import tscheme.truffle.parser.syntax.*;
 import tscheme.truffle.datatypes.TSchemeList;
 import tscheme.truffle.datatypes.TSchemeSymbol;
 
@@ -17,7 +14,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import com.oracle.truffle.api.source.Source;
 import com.oracle.truffle.api.source.SourceSection;
-import tscheme.truffle.syntax.*;
 
 /**
  * ANTLR Visitor, going through source code using patterns in grammar file.

@@ -1,8 +1,6 @@
-package tscheme.truffle.syntax;
+package tscheme.truffle.parser.syntax;
 
 import com.oracle.truffle.api.source.SourceSection;
-
-import tscheme.truffle.parser.Syntax;
 
 public class StringSyntax extends Syntax<String> {
 	public StringSyntax(String value, SourceSection source) {

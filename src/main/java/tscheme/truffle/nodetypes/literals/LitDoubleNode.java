@@ -2,7 +2,7 @@ package tscheme.truffle.nodetypes.literals;
 
 import com.oracle.truffle.api.frame.VirtualFrame;
 import tscheme.truffle.nodetypes.TSchemeNode;
-import tscheme.truffle.syntax.DoubleSyntax;
+import tscheme.truffle.parser.syntax.DoubleSyntax;
 
 /**
  * Class for representing NODE of long (integer) in AST.

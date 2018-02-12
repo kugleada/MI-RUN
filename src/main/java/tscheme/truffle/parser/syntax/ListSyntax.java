@@ -1,9 +1,8 @@
-package tscheme.truffle.syntax;
+package tscheme.truffle.parser.syntax;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import tscheme.truffle.parser.Syntax;
 import tscheme.truffle.datatypes.TSchemeList;
 
 import com.oracle.truffle.api.source.SourceSection;

@@ -49,7 +49,6 @@ public class Namespace {
 
     public FrameSlot addIdentifier(String id) {
         return this.frameDescriptor.findOrAddFrameSlot(id);
-        //return this.frameDescriptor.addFrameSlot(id);
     }
 
     public Pair<Integer, FrameSlot> getIdentifier(String id) {

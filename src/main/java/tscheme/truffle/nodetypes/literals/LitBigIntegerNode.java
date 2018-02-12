@@ -3,7 +3,7 @@ package tscheme.truffle.nodetypes.literals;
 import java.math.BigInteger;
 
 import tscheme.truffle.nodetypes.TSchemeNode;
-import tscheme.truffle.syntax.BigIntegerSyntax;
+import tscheme.truffle.parser.syntax.BigIntegerSyntax;
 
 import com.oracle.truffle.api.frame.VirtualFrame;
 

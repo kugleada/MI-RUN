@@ -4,6 +4,7 @@ import com.oracle.truffle.api.source.Source;
 import com.oracle.truffle.api.source.SourceSection;
 
 import tscheme.truffle.helpers.TSchemeException;
+import tscheme.truffle.parser.syntax.Syntax;
 
 public abstract class TSchemeReadException extends TSchemeException {
     private static final long serialVersionUID = 1L;

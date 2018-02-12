@@ -7,7 +7,7 @@ import java.util.stream.StreamSupport;
 import tscheme.truffle.Environment;
 import tscheme.truffle.nodetypes.TSchemeNode;
 import tscheme.truffle.nodetypes.literals.*;
-import tscheme.truffle.syntax.*;
+import tscheme.truffle.parser.syntax.*;
 import tscheme.truffle.datatypes.TSchemeFunction;
 import tscheme.truffle.datatypes.TSchemeList;
 import tscheme.truffle.datatypes.TSchemeSymbol;

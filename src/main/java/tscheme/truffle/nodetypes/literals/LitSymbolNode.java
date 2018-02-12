@@ -1,7 +1,7 @@
 package tscheme.truffle.nodetypes.literals;
 
 import tscheme.truffle.nodetypes.TSchemeNode;
-import tscheme.truffle.syntax.SymbolSyntax;
+import tscheme.truffle.parser.syntax.SymbolSyntax;
 import tscheme.truffle.datatypes.TSchemeSymbol;
 
 import com.oracle.truffle.api.frame.VirtualFrame;

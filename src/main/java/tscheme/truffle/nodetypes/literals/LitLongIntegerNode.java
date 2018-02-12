@@ -1,7 +1,7 @@
 package tscheme.truffle.nodetypes.literals;
 
 import tscheme.truffle.nodetypes.TSchemeNode;
-import tscheme.truffle.syntax.LongIntegerSyntax;
+import tscheme.truffle.parser.syntax.LongIntegerSyntax;
 
 import com.oracle.truffle.api.frame.VirtualFrame;
 

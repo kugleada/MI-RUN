@@ -1,6 +1,4 @@
-package tscheme.truffle.syntax;
-
-import tscheme.truffle.parser.Syntax;
+package tscheme.truffle.parser.syntax;
 
 import com.oracle.truffle.api.source.SourceSection;
 
