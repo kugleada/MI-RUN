@@ -5,6 +5,9 @@ import org.antlr.v4.runtime.misc.Pair;
 import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.FrameSlot;
 
+/**
+ * Class for keeping track of functions and variables (define in general).
+ */
 public class Namespace {
     public static final int LEVEL_GLOBAL = -1;
     public static final int LEVEL_UNDEFINED = -2;
