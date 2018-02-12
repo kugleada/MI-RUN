@@ -1,4 +1,4 @@
-package tscheme.truffle;
+package tscheme.truffle.datatypes;
 
 import java.math.BigInteger;
 

@@ -2,13 +2,12 @@ package tscheme.truffle.nodetypes;
 
 import java.math.BigInteger;
 
-import tscheme.truffle.TSchemeDataTypes;
-import tscheme.truffle.TSchemeDataTypesGen;
+import tscheme.truffle.datatypes.TSchemeDataTypes;
+import tscheme.truffle.datatypes.TSchemeDataTypesGen;
 import tscheme.truffle.datatypes.TSchemeFunction;
 import tscheme.truffle.datatypes.TSchemeList;
 import tscheme.truffle.datatypes.TSchemeSymbol;
 
-import com.oracle.truffle.api.CompilerDirectives.CompilationFinal;
 import com.oracle.truffle.api.dsl.TypeSystemReference;
 import com.oracle.truffle.api.frame.Frame;
 import com.oracle.truffle.api.frame.MaterializedFrame;
@@ -16,7 +15,6 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.Node;
 import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.nodes.UnexpectedResultException;
-import com.oracle.truffle.api.source.SourceSection;
 
 /**
  * Class represents a node in AST.

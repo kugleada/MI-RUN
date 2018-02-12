@@ -166,8 +166,6 @@ public class Converter {
         TSchemeNode valueNode = convert(list.cdr().cdr().car(), ns);
         DefineNode node = DefineNodeGen.create(valueNode, nameSlot);
         if (valueNode instanceof LambdaNode) {
-            // TODO : not good enough. if there's an error in the lambda,
-            // the name won't be used. Have to pass name
             LambdaNode lambda = (LambdaNode) valueNode;
             lambda.setName(nameSlot.toString());
         }

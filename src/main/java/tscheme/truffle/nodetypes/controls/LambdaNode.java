@@ -27,7 +27,7 @@ public abstract class LambdaNode extends TSchemeNode {
     }
 
     @Specialization(replaces = { "getFunctionWithScope" })
-    public Object getMumblerFunction(VirtualFrame virtualFrame) {
+    public Object getTSchemeFunction(VirtualFrame virtualFrame) {
         TSchemeFunction function = this.getFunction();
         function.setLexicalScope(virtualFrame.materialize()); // materialized frame, VF can't be accessed from heap
         return function;
