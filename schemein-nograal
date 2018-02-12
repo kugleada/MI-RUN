@@ -16,4 +16,4 @@ done
 
 set -x
 
-$JAVACMD $JAVA_ARGS -jar ./target/tschemeinterpreter-0.1-SNAPSHOT-jar-with-dependencies.jar  $PROGRAM_ARGS
+$JAVACMD $JAVA_ARGS -jar ./target/tschemeinterpreter-0.1-SNAPSHOT-jar-with-dependencies.jar $PROGRAM_ARGS
