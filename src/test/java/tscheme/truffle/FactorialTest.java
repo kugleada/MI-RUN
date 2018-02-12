@@ -24,6 +24,11 @@ public class FactorialTest {
                 {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 5)", "120"},
                 {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 10)", "3628800"},
                 {"(define factorial (lambda (n) (if (< n 1) 1 (* n (factorial (- n 1)))))) (factorial 15)", "1307674368000"},
+                /*
+                {"(define fast-factorial-aux (lambda (N A) (if (= N 1) A (fast-factorial-aux (- N 1) (* N A)))))" +
+                "(define fast-factorial (lambda (N) (fast-factorial-aux N 1)))"
+                        "(fast-factorial 5)"
+                */
         });
     }
 

@@ -6,6 +6,8 @@ import java.util.stream.StreamSupport;
 
 import tscheme.truffle.Environment;
 import tscheme.truffle.nodetypes.TSchemeNode;
+import tscheme.truffle.nodetypes.invocations.InvokeNode;
+import tscheme.truffle.nodetypes.invocations.TCInvokeNode;
 import tscheme.truffle.nodetypes.literals.*;
 import tscheme.truffle.parser.syntax.*;
 import tscheme.truffle.datatypes.TSchemeFunction;
@@ -16,7 +18,7 @@ import org.antlr.v4.runtime.misc.Pair;
 import com.oracle.truffle.api.frame.FrameSlot;
 
 import tscheme.truffle.helpers.TSchemeException;
-import tscheme.truffle.nodetypes.invocations.InvokeNode;
+import tscheme.truffle.nodetypes.invocations.DirectInvokeNode;
 import tscheme.truffle.nodetypes.read.ClosureSymbolNodeGen;
 import tscheme.truffle.nodetypes.read.GlobalSymbolNodeGen;
 import tscheme.truffle.nodetypes.read.LocalSymbolNodeGen;
@@ -154,8 +156,13 @@ public class Converter {
                 .stream(list.cdr().spliterator(), false)
                 .map(syn-> convert(syn, ns))
                 .toArray(size -> new TSchemeNode[size]);
-
-        return new InvokeNode(functionNode, arguments);
+        //
+        boolean tailCallEnabled = true;
+        if (tailCallEnabled) {
+            return new TCInvokeNode(functionNode, arguments);
+        } else {
+            return new DirectInvokeNode(functionNode, arguments);
+        }
 
     }
 
@@ -188,6 +195,8 @@ public class Converter {
         for (Syntax<? extends Object> body : list.cdr().cdr()) {
             bodyNodes.add(convert(body, lambdaNs));
         }
+        //set tail to last node in body
+        bodyNodes.get(bodyNodes.size() - 1).setIsTail();
 
         TSchemeFunction function = new TSchemeFunction(
                 formalParameters.toArray(new FrameSlot[] {}),

@@ -2,6 +2,7 @@ package tscheme.truffle.nodetypes;
 
 import java.math.BigInteger;
 
+import com.oracle.truffle.api.CompilerDirectives;
 import tscheme.truffle.datatypes.TSchemeDataTypes;
 import tscheme.truffle.datatypes.TSchemeDataTypesGen;
 import tscheme.truffle.datatypes.TSchemeFunction;
@@ -22,6 +23,17 @@ import com.oracle.truffle.api.nodes.UnexpectedResultException;
 @TypeSystemReference(TSchemeDataTypes.class)
 @NodeInfo(language = "TScheme language", description = "Abstract base node.")
 public abstract class TSchemeNode extends Node {
+
+    @CompilerDirectives.CompilationFinal
+    private boolean isTail = false;
+
+    public boolean isTail() {
+        return this.isTail;
+    }
+
+    public void setIsTail() {
+        this.isTail = true;
+    }
 
     public abstract Object executeGeneric(VirtualFrame virtualFrame);
 

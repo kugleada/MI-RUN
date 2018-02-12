@@ -17,7 +17,7 @@ final public class UninitializedDispatchNode extends DispatchNode {
             cur = cur.getParent();
             size++;
         }
-        InvokeNode invokeNode = (InvokeNode) cur.getParent();
+        DirectInvokeNode invokeNode = (DirectInvokeNode) cur.getParent();
 
         DispatchNode replacement;
         if (size < INLINE_CACHE_SIZE) {

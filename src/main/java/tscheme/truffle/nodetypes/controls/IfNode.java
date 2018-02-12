@@ -75,4 +75,11 @@ public class IfNode extends TSchemeNode {
         }
     }
 
+    @Override
+    public void setIsTail() {
+        super.setIsTail();
+        this.thenNode.setIsTail();
+        this.elseNode.setIsTail();
+    }
+
 }
