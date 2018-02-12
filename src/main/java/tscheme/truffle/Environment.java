@@ -12,19 +12,27 @@ import tscheme.truffle.parser.Namespace;
 
 import java.util.HashMap;
 
+/**
+ * Class representing global environment. 
+ */
 public class Environment {
-    private final FrameDescriptor globalFrameDescriptor;
-    private final Namespace globalNamespace;
-    private final MaterializedFrame globalFrame;
+    private final FrameDescriptor globalFrameDescriptor; //< frame descriptor for frame
+    private final MaterializedFrame globalFrame; //< materialized frame (on heap)
+    
+    private final Namespace globalNamespace; //< namespace, esp. for functions and variables
+    
 
     public Environment() {
+        // create new descriptor and initialize frame
         this.globalFrameDescriptor = new FrameDescriptor();
-        this.globalNamespace = new Namespace(this.globalFrameDescriptor);
         this.globalFrame = this.initGlobalFrame();
 
+        // initilizace namespaces
+        this.globalNamespace = new Namespace(this.globalFrameDescriptor);
         //System.out.println("Global context: " + this.globalFrame);
     }
 
+    // Create global frame and fill it with global (built-in) functions.
     private MaterializedFrame initGlobalFrame() {
         VirtualFrame frame = Truffle.getRuntime().createVirtualFrame(null,
                 this.globalFrameDescriptor);
@@ -33,6 +41,7 @@ public class Environment {
         return frame.materialize();
     }
 
+    // add all built-in methods
     private static void addGlobalFunctions(VirtualFrame virtualFrame) {
 
         FrameDescriptor frameDescriptor = virtualFrame.getFrameDescriptor();

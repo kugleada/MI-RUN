@@ -14,8 +14,9 @@ import tscheme.truffle.nodetypes.TSchemeRootNode;
 import tscheme.truffle.datatypes.TSchemeList;
 
 public class TSchemeMain {
-    public static boolean TAIL_CALL_ENABLED = false;
+    public static boolean TAIL_CALL_ENABLED = false; //< sets up if tail optimization is enabled or not
 
+    // Main function of whole program.
     public static void main(String[] args) throws Exception {
         System.out.println("Running on: " + Truffle.getRuntime().getName());
         if(args.length > 0)
@@ -27,6 +28,7 @@ public class TSchemeMain {
         }
     }
 
+    // Starts REPL.
     private static void startREPL() throws Exception {
 
         // Prepare input reader from stdin.
@@ -63,6 +65,7 @@ public class TSchemeMain {
         }
     }
 
+    // Runs provided Scheme script given in file.
     private static void runTSchemeFromFile(String filename) throws Exception {
 
         Environment globEnv = new Environment();
@@ -78,6 +81,7 @@ public class TSchemeMain {
         }
     }
 
+    // Creates root node from given nodes and frame.
     public static Object createRootAndExecute(TSchemeNode[] nodes, MaterializedFrame frame) {
         TSchemeRootNode root = new TSchemeRootNode(nodes, frame.getFrameDescriptor());
 
