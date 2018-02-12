@@ -1,0 +1,1 @@
+(define fce (lambda (n a) (if ( = n 1) a (fce (- n 1) (* n a))))) (define ff (lambda ( n ) (fce n 1))) (ff 1000)
