@@ -1,27 +1,79 @@
-# MI-RUN
+ # MI-RUN seminar work
+
+This seminar work implements a subset of Scheme language using Java 8 + Truffle. It can run on both HotSpot VM and Graal VM.
+
+# Language description
+
+We chose to implement a subset of Scheme programming language. Scheme is a dialect of Lisp language.
+Basic structure is made from list = "()" or a single symbol/literal = 23, "string" etc.
+Our implemented subset supports following structures:
+
+* (define <variable name> <value>) ->  define variable with given value
+* (if (<condition>) (then) (else)) -> if-then-else structure
+* (lambda (<parameters>) (body 1) (body 2) (body 3)) -> create function with given parameters and body nodes
+* (quote a) -> process a without interpreting it
+
+### Basic syntax examples:
+* (define a 5) -> define variable "a" with value of 5
+* (define square (lambda (x) (* x x))) -> define function square with one parameter that returns square of given parameter
+* (if (= a 1) 1 2) -> if a=1, then return 1, else return 2
+
+
+### Supported datatypes:
+* integer - 1, 5, 6985
+* double (floating point number) - 2.2, 0.6, 9.5, 13659545.54541 (shortcuts like .5 or 10. NOT SUPPORTED)
+* string - "aaa", "abeceda"
+* boolean - #t (true), #f (false)
+* list - (1 2 3 4)
+
+
+### Built-in functions:
+* Arithmetic operators: +, /, *, -, %, i.e. (+ 2 3), (- 5 9), only 2 parameters
+* Relational operators: =, >, <, i.e. (= 1 1), (= a 1)
+* List functions: car, cdr, i.e. (car '(1 2 3))
+* To print variable: printvar, i.e. (printvar a)
+
+
+### Type-casting
+There is implicit cast from long to BigInteger. Also implicit casts from long/BigInteger/boolean/double to String.
+Built-in functions have specializations for most of basic datatypes.
+
 
 # Installation
 
-1. Download repository
+### Pre-requirements
+
+At least JDK8 and maven. Full installation procedure of obtaining requirements is below, in chapter "Requirements"
+
+### Getting our interpreter 
+
+1. Download repository (branch truffled)
 2. Download GraalVM from http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads/index.html (i.e. GraalVM based on JDK for Linux)
 3. Unzip the GraalVM to ./graalvm (./graalvm should contain folders like bin, jre, lib, ...)
-4. Set JAVA_HOME to <absolute path to MI-RUN>/MI-RUN/graalvm (i.e. export JAVA_HOME=/home/jn/run/gitk/MI-RUN/graalvm) - this points to special JDK, maven will call it during build
+4. Set JAVA_HOME to <absolute path to MI-RUN>/MI-RUN/graalvm (i.e. export JAVA_HOME=/home/jn/run/gitk/MI-RUN/graalvm) - this points to special JDK, maven will call it during build.
 
-### Build program WITHOUT tests:
-
+### Build program WITHOUT tests
+In root folder (./MI-RUN), run following:
 ```
-$ mvn -Dmaven.test.skip=true install (or package, or clean install)
+$ mvn -Dmaven.test.skip=true install
 ```
 
-### Build program WITH tests:
-
+### Build program WITH tests
+In root folder (./MI-RUN), run following:
 ```
-$ mvn package (or clean install: mvn clean install)
+$ mvn package
 ```
 
 ## Run program:
-1. Go to root folder of the project (./MI-RUN should be working directory)
-2. Run script ./schemein-[no]graal
+Go to root folder of the project (./MI-RUN should be working directory). Then, use following commands:
+
+For REPL:
+* Run on Graal VM: :code:`./schemein-graal`
+* Run of HotSpot VM: :code:`./schemein-nograal`
+
+To start program from text file:
+* Run on Graal VM: :code:`./schemein-graal ./schemecodes/scheme_fib10.txt`
+* Run of HotSpot VM: :code:`./schemein-nograal ./schemecodes/scheme_fib10.txt`
 
 ### Example runs
 
@@ -29,7 +81,6 @@ REPL:
 ```
 $ ./schemein-graal
 ```
-
 Input from file:
 ```
 $ ./schemein-graal ./schemecodes/scheme_fib10.txt
@@ -56,6 +107,8 @@ If not working, then this:
 *  sudo add-apt-repository "deb http://ppa.launchpad.net/natecarlson/maven3/ubuntu precise main"
 *  sudo apt-get update
 * sudo apt-get install maven3
+
+### In case of IDE needed ...
 
 For IntelliJ IDE, follow instructions here: https://www.jetbrains.com/help/idea/install-and-set-up-intellij-idea.html
 
