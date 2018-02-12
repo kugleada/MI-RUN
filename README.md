@@ -69,8 +69,8 @@ $ mvn package
 Go to root folder of the project (./MI-RUN should be working directory). Then, use following commands:
 
 For REPL:
-* Run on Graal VM: :code:`./schemein-graal`
-* Run of HotSpot VM: :code:`./schemein-nograal`
+* Run on Graal VM: `./schemein-graal`
+* Run of HotSpot VM: `./schemein-nograal`
 
 To start program from text file:
 * Run on Graal VM: `./schemein-graal ./schemecodes/scheme_fib10.txt`
