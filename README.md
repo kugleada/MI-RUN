@@ -9,13 +9,14 @@ Basic structure is made from list = "()" or a single symbol/literal = 23, "strin
 Our implemented subset supports following structures:
 
 * (define <variable name> <value>) ->  define variable with given value
-* (if (<condition>) (then) (else)) -> if-then-else structure
-* (lambda (<parameters>) (body 1) (body 2) (body 3)) -> create function with given parameters and body nodes
+* (if (condition) (then) (else)) -> if-then-else structure
+* (lambda (parameters) (body 1) (body 2) (body 3)) -> create function with given parameters and body nodes
 * (quote a) -> process a without interpreting it
 
 ### Basic syntax examples:
 * (define a 5) -> define variable "a" with value of 5
 * (define square (lambda (x) (* x x))) -> define function square with one parameter that returns square of given parameter
+* ((lambda (x) (* x x))) 2) -> call given lambda with parameters x = 2
 * (if (= a 1) 1 2) -> if a=1, then return 1, else return 2
 
 
@@ -72,8 +73,8 @@ For REPL:
 * Run of HotSpot VM: :code:`./schemein-nograal`
 
 To start program from text file:
-* Run on Graal VM: :code:`./schemein-graal ./schemecodes/scheme_fib10.txt`
-* Run of HotSpot VM: :code:`./schemein-nograal ./schemecodes/scheme_fib10.txt`
+* Run on Graal VM: `./schemein-graal ./schemecodes/scheme_fib10.txt`
+* Run of HotSpot VM: `./schemein-nograal ./schemecodes/scheme_fib10.txt`
 
 ### Example runs
 
