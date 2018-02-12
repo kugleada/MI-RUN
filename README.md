@@ -28,6 +28,8 @@ Our implemented subset supports following structures:
 * list - (1 2 3 4)
 * for negative numbers (integer/double), you have to use Built-in function for subtract, i.e. write (- 0 5), which means (0 - 5) = -5
 
+(closures are not supported)
+
 ### Built-in functions:
 * Arithmetic operators: +, /, *, -, %, i.e. (+ 2 3), (- 5 9), only 2 parameters
 * Relational operators: =, >, <, i.e. (= 1 1), (= a 1)
