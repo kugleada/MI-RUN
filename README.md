@@ -26,7 +26,7 @@ Our implemented subset supports following structures:
 * string - "aaa", "abeceda"
 * boolean - #t (true), #f (false)
 * list - (1 2 3 4)
-
+* for negative numbers (integer/double), you have to use Built-in function for subtract, i.e. write (- 0 5), which means (0 - 5) = -5
 
 ### Built-in functions:
 * Arithmetic operators: +, /, *, -, %, i.e. (+ 2 3), (- 5 9), only 2 parameters
