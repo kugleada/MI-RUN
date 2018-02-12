@@ -27,7 +27,7 @@ final public class UninitializedDispatchNode extends DispatchNode {
             this.replace(replacement);
         } else {
             replacement = new GenericDispatchNode();
-            invokeNode.dispatchNode.replace(replacement);
+            //invokeNode.dispatchNode.replace(replacement);
         }
 
         // Call function with newly created dispatch nodetypes.
