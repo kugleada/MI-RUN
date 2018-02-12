@@ -14,6 +14,7 @@ import tscheme.truffle.nodetypes.TSchemeRootNode;
 import tscheme.truffle.datatypes.TSchemeList;
 
 public class TSchemeMain {
+    public static boolean TAIL_CALL_ENABLED = false;
 
     public static void main(String[] args) throws Exception {
         System.out.println("Running on: " + Truffle.getRuntime().getName());

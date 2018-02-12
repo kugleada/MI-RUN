@@ -9,10 +9,11 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.ExplodeLoop;
 
 /**
- * Specialized class for closure storage, with specializations.
+ * Specialized class for outer variable storage, with specializations.
+ * Depth indicates how deep in Frame stack is desired variable defined.
  */
 @NodeField(name = "depth", type = int.class)
-public abstract class ClosureSymbolNode extends SymbolNode {
+public abstract class OuterSymbolNode extends SymbolNode {
 
     // Getter for closure slots.
     public interface FrameGet<DataType> {
@@ -48,7 +49,7 @@ public abstract class ClosureSymbolNode extends SymbolNode {
 
     public abstract int getDepth();
 
-    //
+    //find variable in frame stack
     @ExplodeLoop
     public <DataType> DataType readUpFrameStack(FrameGet<DataType> getter, Frame frame)
             throws FrameSlotTypeException {

@@ -9,6 +9,7 @@ import tscheme.truffle.nodetypes.TSchemeNode;
 import tscheme.truffle.nodetypes.invocations.InvokeNode;
 import tscheme.truffle.nodetypes.invocations.TCInvokeNode;
 import tscheme.truffle.nodetypes.literals.*;
+import tscheme.truffle.nodetypes.read.*;
 import tscheme.truffle.parser.syntax.*;
 import tscheme.truffle.datatypes.TSchemeFunction;
 import tscheme.truffle.datatypes.TSchemeList;
@@ -19,10 +20,6 @@ import com.oracle.truffle.api.frame.FrameSlot;
 
 import tscheme.truffle.helpers.TSchemeException;
 import tscheme.truffle.nodetypes.invocations.DirectInvokeNode;
-import tscheme.truffle.nodetypes.read.ClosureSymbolNodeGen;
-import tscheme.truffle.nodetypes.read.GlobalSymbolNodeGen;
-import tscheme.truffle.nodetypes.read.LocalSymbolNodeGen;
-import tscheme.truffle.nodetypes.read.SymbolNode;
 import tscheme.truffle.nodetypes.controls.DefineNode;
 import tscheme.truffle.nodetypes.controls.DefineNodeGen;
 import tscheme.truffle.nodetypes.controls.IfNode;
@@ -30,6 +27,8 @@ import tscheme.truffle.nodetypes.controls.LambdaNode;
 import tscheme.truffle.nodetypes.controls.LambdaNodeGen;
 import tscheme.truffle.nodetypes.controls.QuoteNode;
 import tscheme.truffle.nodetypes.controls.QuoteNodeGen;
+
+import static tscheme.truffle.TSchemeMain.TAIL_CALL_ENABLED;
 
 /**
  * Convert Scheme syntax tree to AST.
@@ -117,7 +116,7 @@ public class Converter {
         } else if (pair.a == Namespace.LEVEL_GLOBAL) {
             node = GlobalSymbolNodeGen.create(pair.b, this.env.getGlobalFrame());
         } else {
-            node = ClosureSymbolNodeGen.create(pair.b, pair.a);
+            node = OuterSymbolNodeGen.create(pair.b, pair.a);
         }
 
         return node;
@@ -156,9 +155,8 @@ public class Converter {
                 .stream(list.cdr().spliterator(), false)
                 .map(syn-> convert(syn, ns))
                 .toArray(size -> new TSchemeNode[size]);
-        //
-        boolean tailCallEnabled = false;
-        if (tailCallEnabled) {
+
+        if (TAIL_CALL_ENABLED) {
             return new TCInvokeNode(functionNode, arguments);
         } else {
             return new DirectInvokeNode(functionNode, arguments);
