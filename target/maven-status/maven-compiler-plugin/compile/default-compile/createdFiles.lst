@@ -92,6 +92,7 @@ tscheme/truffle/TSchemeMain.class
 tscheme/truffle/parser/TSchemeBaseListener.class
 tscheme/truffle/parser/syntax/BigIntegerSyntax.class
 tscheme/truffle/Environment.class
+tscheme/truffle/nodetypes/invocations/DirectInvokeNode.class
 tscheme/truffle/nodetypes/builtins/basicop/MulBuiltInNodeFactory$MulBuiltInNodeGen.class
 tscheme/truffle/nodetypes/builtins/helpers/CarBuiltInNodeFactory$1.class
 cz/schemeinterpreter/truffleNodes/type/TSchemeList$1.class
@@ -101,7 +102,9 @@ cz/schemeinterpreter/datatypes/SchemeFunction.class
 tscheme/truffle/nodetypes/builtins/basicop/ModBuiltInNodeFactory$1.class
 cz/schemeinterpreter/scheme_env/BuiltInFunction$2.class
 cz/schemeinterpreter/truffleNodes/TSpecialForm.class
+tscheme/truffle/nodetypes/invocations/TCInvokeNode.class
 tscheme/truffle/parser/Namespace.class
+tscheme/truffle/nodetypes/invocations/TailCallException.class
 cz/schemeinterpreter/truffleNodes/TSchemeLiteralSymbolNode.class
 tscheme/truffle/parser/syntax/Syntax.class
 cz/schemeinterpreter/truffleNodes/node/TSchemeNode.class

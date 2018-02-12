@@ -157,7 +157,7 @@ public class Converter {
                 .map(syn-> convert(syn, ns))
                 .toArray(size -> new TSchemeNode[size]);
         //
-        boolean tailCallEnabled = true;
+        boolean tailCallEnabled = false;
         if (tailCallEnabled) {
             return new TCInvokeNode(functionNode, arguments);
         } else {

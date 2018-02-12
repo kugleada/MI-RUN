@@ -29,6 +29,7 @@ public class FactorialTest {
                 "(define fast-factorial (lambda (N) (fast-factorial-aux N 1)))"
                         "(fast-factorial 5)"
                 */
+                //(define loop (lambda (n a) (if (= a n) a (loop n (+ a 1)))))
         });
     }
 
